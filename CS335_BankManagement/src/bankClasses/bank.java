@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 class bank{
 	public static void main(String [] args) throws Exception{
+		//test login
 		CustomerFactory cF = new CustomerFactory("data/CustomerList.csv");
 		ArrayList<Customer> cusList = new ArrayList<Customer>();
 		Scanner scanner = new Scanner(System.in);
