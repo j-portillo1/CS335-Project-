@@ -2,6 +2,7 @@ package bankClasses;
 
 import java.io.File;  // Import the File class
 import java.io.FileNotFoundException;  // Import this class to handle errors
+import java.io.FileWriter;
 import java.util.Scanner;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -83,6 +84,22 @@ import java.util.Random;
                     
                     cus.addAccount(a);
                 }
+                try (FileWriter pw = new FileWriter ("data/CustomerList.csv",true)){
+                	pw.append("\n");
+                	pw.append(firstName + ",");
+                	pw.append(lastName + ",");
+        			pw.append(password + ",");
+        			pw.append(email + ",");
+        			pw.append(dobString + ",");
+        			pw.append(username + ",");
+        			pw.append(password + ",");
+        			
+        			System.out.println("Finished wiriting to file");
+        			
+        		}catch (FileNotFoundException e ) {
+        			System.out.println("Error writing  to file ");
+        			e.printStackTrace();
+        		}
             }
             return cus;}
         	catch(ParseException e){
