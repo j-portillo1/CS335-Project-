@@ -43,6 +43,24 @@ class Customer{
 		this.password = password;
 	}
 	
+	public Account getCheckingAccount() {
+        for (Account account : accList) {
+            if (account.getAccType().equalsIgnoreCase("checking")) {
+                return account;
+            }
+        }
+        return null; // Return null if no checking account found
+    }
+    
+    public Account getSavingAccount() {
+        for (Account account : accList) {
+            if (account.getAccType().equalsIgnoreCase("saving")) {
+                return account;
+            }
+        }
+        return null; // Return null if no saving account found
+    }
+	
 	public String toString() {
 		return("Name: "+ this.firstName + " "+ this.lastName + " ,email: " + this.email + " ,customer ID: "+ this.customerID);
 	}

@@ -52,7 +52,7 @@ import java.util.Random;
             
             String username = generateCustomerID(firstName, lastName);
             System.out.printf(firstName + " "+ lastName+ ", your username/customer ID is : "+username);
-            
+            System.out.println();
             System.out.printf(firstName + " "+ lastName+ ", what is your password?");
             String password = sc.next();
             
@@ -60,53 +60,81 @@ import java.util.Random;
             
             String answer = "y";
             
-            while (answer=="y") {
-            	System.out.println("Do you want to open an account? [y/n] ");
-            	answer = sc.next();
+            do {
+                System.out.println("Do you want to open an account? [y/n] ");
+                answer = sc.next();
                 if (answer.equals("y")) {
                     System.out.printf("What type of account do you want? [C]hecking/[S]aving? ");
                     String accTypeAns = sc.next();
                     String accType;
-                    if(accTypeAns=="C") {
-                    	accType = "Checking";
-                    }else {
-                    	accType = "Saving";
+                    if (accTypeAns.equals("C")) {
+                        accType = "Checking";
+                    } else {
+                        accType = "Saving";
                     }
-                    
+
                     Random random = new Random();
-                    int accNum = random.nextInt(999999-100000+1)+100000;
-                    System.out.println("Your account number is: "+ accNum);
-      
+                    int accNum = random.nextInt(999999 - 100000 + 1) + 100000;
+                    System.out.println("Your account number is: " + accNum);
+
                     System.out.printf("How much money do you want to insert? ");
                     int accBal = sc.nextInt();
-                    
+
                     Account a = new Account(accNum, accType, accBal, username);
-                    
+
                     cus.addAccount(a);
                 }
-                try (FileWriter pw = new FileWriter ("data/CustomerList.csv",true)){
-                	pw.append("\n");
-                	pw.append(firstName + ",");
-                	pw.append(lastName + ",");
-        			pw.append(password + ",");
-        			pw.append(email + ",");
-        			pw.append(dobString + ",");
-        			pw.append(username + ",");
-        			pw.append(password + ",");
-        			
-        			System.out.println("Finished wiriting to file");
-        			
-        		}catch (FileNotFoundException e ) {
-        			System.out.println("Error writing  to file ");
-        			e.printStackTrace();
-        		}
+            } while (answer.equals("y"));
+
+            try (FileWriter pw = new FileWriter("data/CustomerList.csv", true)) {
+                pw.append(firstName + ",");
+                pw.append(lastName + ",");
+                pw.append(email + ",");
+                pw.append(dobString + ",");
+                pw.append(username + ",");
+                pw.append(password + ",");
+
+                if (cus.getCheckingAccount()!=null&& cus.getSavingAccount()!=null) {
+                    Account cusCheckAcc = cus.getCheckingAccount();
+                    Account cusSavAcc = cus.getSavingAccount();
+                    pw.append(cusCheckAcc.getAccNum() + ",");
+                    pw.append(cusCheckAcc.getAccBal() + ",");
+                    pw.append(cusSavAcc.getAccNum() + ",");
+                    pw.append(cusSavAcc.getAccBal() +"\n");
+                } else {
+                    if (cus.getCheckingAccount()!=null) {
+                        Account cusCheckAcc = cus.getCheckingAccount();
+                        pw.append(cusCheckAcc.getAccNum() + ",");
+                        pw.append(cusCheckAcc.getAccBal() + ",");
+                        pw.append("0" + ",");
+                        pw.append("0" + "\n");
+                    } else if (cus.getSavingAccount()!=null) {
+                        Account cusSavAcc = cus.getSavingAccount();
+                        pw.append("0" + ",");
+                        pw.append("0" + ",");
+                        pw.append(cusSavAcc.getAccNum() + ",");
+                        pw.append(Integer.toString(cusSavAcc.getAccBal()) + "\n");
+                    } else {
+                        pw.append("0" + ",");
+                        pw.append("0" + ",");
+                        pw.append("0" + ",");
+                        pw.append("0" + "\n");
+                    }
+                }
+
+                System.out.println("Finished writing to file");
+
+            } catch (FileNotFoundException e) {
+                System.out.println("Error writing to file ");
+                e.printStackTrace();
             }
-            return cus;}
-        	catch(ParseException e){
+            return cus;
+            } catch(ParseException e){
         		 System.out.println("Error parsing date. Please enter a valid date format (mm/dd/yyyy).");
         	     sc.nextLine(); 
         	     return makeCustomer();
         	}
+       
     }
         
     private Date parseDate(String dateString) throws ParseException {
