@@ -2,8 +2,8 @@ package bankClasses;
 
 public class MasterCard extends CreditCard {
 
-    public MasterCard(String card_number, int balance, int limit, Customer owner) {
-        super(card_number, balance, limit, owner);
+    public MasterCard(String card_number, int balance, int limit, int cvv, Customer owner) {
+        super(card_number, balance, limit, cvv, owner);
     }
 
     @Override

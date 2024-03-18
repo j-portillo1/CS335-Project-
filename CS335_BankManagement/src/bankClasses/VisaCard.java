@@ -2,8 +2,8 @@ package bankClasses;
 
 public class VisaCard extends CreditCard {
 
-    public VisaCard(String card_number, int balance, int limit, Customer owner) {
-        super(card_number, balance, limit, owner);
+    public VisaCard(String card_number, int balance, int limit, int cvv, Customer owner) {
+        super(card_number, balance, limit, cvv, owner);
     }
 
     @Override

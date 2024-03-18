@@ -7,8 +7,9 @@ abstract class CreditCard {
     protected int balance;
     protected int limit;
     protected Customer owner;
+    protected int cvv;
 
-    public CreditCard(String card_number, int balance, int limit, Customer owner){
+    public CreditCard(String card_number, int balance, int limit, int cvv, Customer owner){
         this.card_number = card_number;
         this.balance = balance;
         this.limit = limit;
