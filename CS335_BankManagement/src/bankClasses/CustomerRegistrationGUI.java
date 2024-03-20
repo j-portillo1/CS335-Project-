@@ -97,7 +97,6 @@ public class CustomerRegistrationGUI {
      	        writer.append(email + ",");
      	        writer.append(dob + ",");
      	        writer.append(password + ",");
-     	        
      	        writer.append("\n");
      	        
      	        
