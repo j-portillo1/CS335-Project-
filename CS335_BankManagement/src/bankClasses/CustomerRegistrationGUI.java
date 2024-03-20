@@ -2,7 +2,9 @@ package bankClasses;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.io.FileWriter;
 //import java.awt.event.ActionListener;
+import java.io.IOException;
 
 public class CustomerRegistrationGUI {
 	public static void main(String args[]) {
@@ -76,15 +78,7 @@ public class CustomerRegistrationGUI {
             String dob = dobText.getText();
             String password = new String(passwordText.getPassword());
 
-            // CustomerFactory userInformation = new CustomerFactory();
-            // String firstName = firstText.getText();
-            // String lastName = lastText.getText();
-            // String userID = userInformation.generateCustomerID(firstName, lastName);
-            // String email = emailText.getText();
-            // Date birthday = userInformation.parseDate(dobText.getText());
-            // String password = new String(passwordText.getPassword());
-
-            // Customer cus = new Customer(firstName, lastName, email, birthday, userID, password);
+           
 
             if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || dob.isEmpty() || password.isEmpty()) {
                 // If any of the fields are empty, display an error message
@@ -93,6 +87,29 @@ public class CustomerRegistrationGUI {
                 messageLabel.setForeground(Color.blue);
                 messageLabel.setText("Registration successful!");
             }
+            
+          //File file = new File("data/CustomerList.csv");		
+     	   try(FileWriter writer = new FileWriter("data/CustomerList.csv", true)){
+     	      //FileWriter output = new FileWriter( file );
+     	      //BufferedWriter writer = new BufferedWriter(output);
+     	        writer.append(firstName + ",");
+     	        writer.append(lastName + ",");
+     	        writer.append(email + ",");
+     	        writer.append(dob + ",");
+     	        writer.append(password + ",");
+     	        
+     	        writer.append("\n");
+     	        
+     	        
+
+     	        
+     	       
+     	    } catch(IOException e1){
+     	       e1.printStackTrace();
+     	    }
+     	
+
+
             
         });
     }
