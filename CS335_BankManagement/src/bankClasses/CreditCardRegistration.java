@@ -19,8 +19,7 @@ public class CreditCardRegistration{
         
         // Label for personal information
         JLabel personalInfoLabel = new JLabel("Personal Information:");
-        personalInfoLabel.setBounds(10, 0, 150, 25); // Adjust the position and size as needed
-        panel.add(personalInfoLabel);
+        personalInfoLabel.setBounds(10, 0, 150, 25); 
         //Box for first name
         JLabel firstNameLabel = new JLabel("First name");
         firstNameLabel.setBounds(10, 20, 80, 25);
@@ -39,7 +38,7 @@ public class CreditCardRegistration{
         
         // Label for identification
         JLabel identificationLabel = new JLabel("Identification: ");
-        personalInfoLabel.setBounds(10, 80, 150, 25); // Adjust the position and size as needed
+        identificationLabel.setBounds(10, 80, 150, 25); 
         panel.add(identificationLabel);
 
         //Box for DOB
@@ -60,7 +59,7 @@ public class CreditCardRegistration{
         
         // Label for identification
         JLabel homeLabel = new JLabel("Home address: ");
-        homeLabel.setBounds(10, 170, 150, 25); // Adjust the position and size as needed
+        homeLabel.setBounds(10, 170, 150, 25); 
         panel.add(homeLabel);
         
         //Box for home address
@@ -73,7 +72,7 @@ public class CreditCardRegistration{
         
         // Label for contact
         JLabel contactLabel = new JLabel("Contact Information: ");
-        contactLabel.setBounds(10, 230, 150, 25); // Adjust the position and size as needed
+        contactLabel.setBounds(10, 230, 150, 25); 
         panel.add(contactLabel);
 
         //Box for email
@@ -91,10 +90,18 @@ public class CreditCardRegistration{
         JTextField phoneText = new JTextField(12);
         phoneText.setBounds(100, 290, 165, 25);
         panel.add(phoneText);
-     
+        
+        //Box for visa type
+        JLabel creditLabel = new JLabel("Type of credit card: ");
+        creditLabel.setBounds(10, 320, 150, 25);
+        panel.add(creditLabel);
+        JTextField creditText = new JTextField(12);
+        creditText.setBounds(130, 320, 165, 25);
+        panel.add(creditText);
+        
         //Registration button
         JButton registrationButton = new JButton("Register");
-        registrationButton.setBounds(10, 330, 120, 25);
+        registrationButton.setBounds(10, 350, 120, 25);
         panel.add(registrationButton);
 
         //Display message
@@ -113,8 +120,9 @@ public class CreditCardRegistration{
             String number = numberText.getText();
             String home = homeaddressText.getText();   
             String phone = phoneText.getText();
+            String credit = creditText.getText();
            
-            if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || dob.isEmpty() || number.isEmpty()||home.isEmpty()||phone.isEmpty()) {
+            if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || dob.isEmpty() || number.isEmpty()||home.isEmpty()||phone.isEmpty()||credit.isEmpty()) {
                 // If any of the fields are empty, display an error message
                 messageLabel.setText("Please fill in all fields");
             } else {
