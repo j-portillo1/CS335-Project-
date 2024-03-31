@@ -35,6 +35,14 @@ class Account{
 		this.accBal = newBal;
 	}
 	
+	public void addBal(int baltransfer) {
+		this.accBal += baltransfer;
+	}
+	
+	public void subtractBal(int baltransfer) {
+		this.accBal -= baltransfer;
+	}
+	
 	public String toString(){
 		return("Account Number: " + this.accNum + ", type: " + this.accType + ", balance: " + this.accBal + ", customer ID: "+ this.customerID);
 	}
