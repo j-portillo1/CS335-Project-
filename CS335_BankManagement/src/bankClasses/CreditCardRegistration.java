@@ -3,6 +3,8 @@ package bankClasses;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class CreditCardRegistration{
 	
@@ -11,7 +13,7 @@ public class CreditCardRegistration{
         //Creating the Frame
         JFrame frame = new JFrame("Credit Card Registration Frame");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(400, 400);
+        frame.setSize(500, 500);
         JPanel panel = new JPanel();
         frame.add(panel);
 
@@ -76,7 +78,7 @@ public class CreditCardRegistration{
         panel.add(contactLabel);
 
         //Box for email
-        JLabel emailLabel = new JLabel("Email address");
+        JLabel emailLabel = new JLabel("Email address: ");
         emailLabel.setBounds(10, 260, 100, 25);
         panel.add(emailLabel);
         JTextField emailText = new JTextField(12);
@@ -128,7 +130,24 @@ public class CreditCardRegistration{
             } else {
                 messageLabel.setForeground(Color.blue);
                 messageLabel.setText("Registration successful!");
-            }
+                panel.repaint(); // Force the panel to repaint
+          	   try(FileWriter writer = new FileWriter("data/CreditList.csv", true)){
+          	      //FileWriter output = new FileWriter( file );
+          	      //BufferedWriter writer = new BufferedWriter(output);
+          	        writer.append(firstName + ",");
+          	        writer.append(lastName + ",");
+          	        writer.append(email + ",");
+          	        writer.append(dob + ",");
+          	        writer.append(number + ",");
+          	        writer.append(home + ",");
+        	        writer.append(phone + ",");
+        	        writer.append(credit);
+          	        writer.append("\n");
+          	        
+          	    } catch(IOException e1){
+          	       e1.printStackTrace();
+          	      messageLabel.setText("Error occurred while writing to file");}
+                 }    
             
         });
     }

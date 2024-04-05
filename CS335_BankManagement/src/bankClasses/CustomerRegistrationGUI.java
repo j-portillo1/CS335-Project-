@@ -86,7 +86,7 @@ public class CustomerRegistrationGUI {
             } else {
                 messageLabel.setForeground(Color.blue);
                 messageLabel.setText("Registration successful!");
-            }
+            
             
           //File file = new File("data/CustomerList.csv");		
      	   try(FileWriter writer = new FileWriter("data/CustomerList.csv", true)){
@@ -99,13 +99,10 @@ public class CustomerRegistrationGUI {
      	        writer.append(password + ",");
      	        writer.append("\n");
      	        
-     	        
-
-     	        
-     	       
      	    } catch(IOException e1){
      	       e1.printStackTrace();
-     	    }
+     	      messageLabel.setText("Error occurred while writing to file");}
+            }
      	
 
 
