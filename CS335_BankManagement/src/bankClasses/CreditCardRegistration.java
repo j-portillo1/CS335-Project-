@@ -137,11 +137,11 @@ public class CreditCardRegistration {
         residenceText.setBounds(135, 440, 165, 25);
         panel.add(residenceText);
 
-        JLabel employmentLabel = new JLabel("Employment status: ");
-        employmentLabel.setBounds(10, 470, 150, 25);
+        JLabel employmentLabel = new JLabel("Employment status (Yes/No): ");
+        employmentLabel.setBounds(10, 470, 200, 25);
         panel.add(employmentLabel);
         JTextField employmentText = new JTextField(12);
-        employmentText.setBounds(135, 470, 165, 25);
+        employmentText.setBounds(200, 470, 165, 25);
         panel.add(employmentText);
 
         JLabel incomeLabel = new JLabel("Total gross income: ");
