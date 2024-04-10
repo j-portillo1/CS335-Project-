@@ -55,6 +55,8 @@ public class LoginGUI {
             } else {
                 messageLabel.setForeground(Color.blue);
                 messageLabel.setText("Login successful!");
+                frame.dispose();
+            	new MenuFrame();
             }
             
         });

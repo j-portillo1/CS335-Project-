@@ -1,10 +1,9 @@
 package bankClasses;
 
 import java.awt.FlowLayout;
+import java.awt.Image;
 import java.awt.event.*;
 import javax.swing.*;
-
-
 
 public class MenuFrame extends JFrame implements ActionListener{
 
@@ -15,17 +14,17 @@ public class MenuFrame extends JFrame implements ActionListener{
 	JMenuItem creditCardItem;
 	JMenuItem documentsItem;
 	JMenuItem logOutItem;
-	//ImageIcon creditCardIcon;
-	//ImageIcon documentsIcon;
-	//ImageIcon logOutIcon;
+	ImageIcon creditCardIcon;
+	ImageIcon documentsIcon;
+	ImageIcon logOutIcon;
 	MenuFrame(){		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setSize(300,300);
+		this.setSize(300,400);
 		this.setLayout(new FlowLayout());
 		
-		//creditCardIcon = new ImageIcon(".png");
-		//documentsIcon = new ImageIcon(".png");
-		//logOutIcon = new ImageIcon(".png");
+		//creditCardIcon = new ImageIcon("data/creditcard.png");
+		//documentsIcon = new ImageIcon("data/document-icon.png");
+		//logOutIcon = new ImageIcon("data/log-out-icon.png");
 		
 		menuBar = new JMenuBar();
 		
@@ -33,17 +32,32 @@ public class MenuFrame extends JFrame implements ActionListener{
 		accountsMenu = new JMenu("Accounts");
 		helpMenu = new JMenu("Help");
 		
-		creditCardItem = new JMenuItem("Open Credit Card");
-		documentsItem = new JMenuItem("Documents");
-		logOutItem = new JMenuItem("Log Out");
+		ImageIcon creditCardIcon = new ImageIcon("data/creditcard.png");
+		Image image = creditCardIcon.getImage(); // transform it 
+		Image newimg = image.getScaledInstance(20, 20,  java.awt.Image.SCALE_SMOOTH); // scale it smoothly  
+		ImageIcon newImageIcon = new ImageIcon(newimg);
+		creditCardItem = new JMenuItem("Open Credit Card",newImageIcon);
+		ImageIcon documentsIcon = new ImageIcon("data/document-icon.png");
+		Image image2 = documentsIcon.getImage(); // transform it 
+		Image newimg2 = image2.getScaledInstance(20, 20,  java.awt.Image.SCALE_SMOOTH); // scale it smoothly  
+		ImageIcon docImageIcon = new ImageIcon(newimg2);
+		documentsItem = new JMenuItem("Documents",docImageIcon);
+		ImageIcon logOutIcon = new ImageIcon("data/log-out-icon.png");
+		Image image3 = logOutIcon.getImage(); // transform it 
+		Image newimg3 = image3.getScaledInstance(20, 20,  java.awt.Image.SCALE_SMOOTH); // scale it smoothly  
+		ImageIcon logImageIcon = new ImageIcon(newimg3);
+		logOutItem = new JMenuItem("Log Out",logImageIcon);
 		
 		creditCardItem.addActionListener(this);
 		documentsItem.addActionListener(this);
 		logOutItem.addActionListener(this);
 		
-		//creditCardIcon.setIcon(creditCardIcon);
-		//documentsIcon.setIcon(documentsIcon);
-		//logOutIcon.setIcon(logOutIcon);
+		//creditCardIcon.setImage(creditCardIcon);
+		//documentsIcon.setImage(documentsIcon);
+		//logOutIcon.setIconImage(logOutIcon);
+		
+		
+		
 		
 		homeMenu.setMnemonic(KeyEvent.VK_F); // Alt + f for file
 		accountsMenu.setMnemonic(KeyEvent.VK_E); // Alt + e for edit
@@ -86,4 +100,3 @@ public static void main(String[] args) {
 	}
 
 }
-
