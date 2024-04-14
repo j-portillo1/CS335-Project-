@@ -46,7 +46,7 @@ class BankMainDriver{
 
 	    MasterCard masCard = new MasterCard("5413330089010640", 90, 200, 002, cusList.get(7));
 	    String validateMas = masCard.validateCardType("5413330089010640");
-
+	    
 	    if (!validateDisc.equals("Invalid") || !validateVis.equals("Invalid") || !validateMas.equals("Invalid")) {
 	    	System.out.println("You have entered your account on the ATM");
 	    } else {
