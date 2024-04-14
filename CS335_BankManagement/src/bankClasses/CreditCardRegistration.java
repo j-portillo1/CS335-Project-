@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.text.MaskFormatter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.ParseException;
@@ -11,7 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CreditCardRegistration {
-    public static void main(String args[]) {
+    CreditCardRegistration() {
         JFrame frame = new JFrame("Credit Card Registration Frame");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(500, 800);
@@ -245,4 +246,11 @@ public class CreditCardRegistration {
         Matcher matcher = pattern.matcher(zipCode);
         return matcher.matches();
     }
+    
+	public static void main(String[] args) {
+			
+			new CreditCardRegistration();
+			
+			
+		}
 }

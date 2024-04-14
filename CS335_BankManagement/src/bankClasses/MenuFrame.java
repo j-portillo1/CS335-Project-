@@ -11,7 +11,7 @@ public class MenuFrame extends JFrame implements ActionListener{
 	JMenu homeMenu;
 	JMenu accountsMenu;
 	JMenu helpMenu;
-	JMenuItem creditCardItem;
+	JButton creditCardItem;
 	JMenuItem documentsItem;
 	JMenuItem logOutItem;
 	ImageIcon creditCardIcon;
@@ -32,16 +32,22 @@ public class MenuFrame extends JFrame implements ActionListener{
 		accountsMenu = new JMenu("Accounts");
 		helpMenu = new JMenu("Help");
 		
+		
 		ImageIcon creditCardIcon = new ImageIcon("data/creditcard.png");
 		Image image = creditCardIcon.getImage(); // transform it 
 		Image newimg = image.getScaledInstance(20, 20,  java.awt.Image.SCALE_SMOOTH); // scale it smoothly  
 		ImageIcon newImageIcon = new ImageIcon(newimg);
-		creditCardItem = new JMenuItem("Open Credit Card",newImageIcon);
+		creditCardItem = new JButton("Open Credit Card",newImageIcon);
+		
+		
+		
 		ImageIcon documentsIcon = new ImageIcon("data/document-icon.png");
 		Image image2 = documentsIcon.getImage(); // transform it 
 		Image newimg2 = image2.getScaledInstance(20, 20,  java.awt.Image.SCALE_SMOOTH); // scale it smoothly  
 		ImageIcon docImageIcon = new ImageIcon(newimg2);
 		documentsItem = new JMenuItem("Documents",docImageIcon);
+		
+		
 		ImageIcon logOutIcon = new ImageIcon("data/log-out-icon.png");
 		Image image3 = logOutIcon.getImage(); // transform it 
 		Image newimg3 = image3.getScaledInstance(20, 20,  java.awt.Image.SCALE_SMOOTH); // scale it smoothly  
@@ -77,7 +83,22 @@ public class MenuFrame extends JFrame implements ActionListener{
 		this.setJMenuBar(menuBar);
 		
 		this.setVisible(true);
+		
+		
+		 creditCardItem.addActionListener((ActionEvent ae) -> {
+				JFrame jFrame = new JFrame();
+				jFrame.dispose();
+	        	new CreditCardRegistration();
+	      
+	        	
+	     	   
+	      	  
+	        });
 	}
+	 
+  	   
+   	  
+  
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {

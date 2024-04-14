@@ -6,7 +6,7 @@ import java.awt.event.ActionEvent;
 //import java.awt.event.ActionListener;
 
 public class LoginGUI {
-	public static void main(String args[]) {
+	LoginGUI() {
 
         //Creating the Frame
         JFrame frame = new JFrame("User Login Frame");
@@ -37,6 +37,11 @@ public class LoginGUI {
         JButton loginButton = new JButton("Login");
         loginButton.setBounds(10, 80, 120, 25);
         panel.add(loginButton);
+        
+        //New Customer
+        JButton newCustomerBttn = new JButton("New Customer");
+        newCustomerBttn.setBounds(10, 120, 130, 25);
+        panel.add(newCustomerBttn);
 
         //Display message
         JLabel messageLabel = new JLabel();
@@ -45,6 +50,15 @@ public class LoginGUI {
         panel.add(messageLabel);
 
         frame.setVisible(true);
+        
+        newCustomerBttn.addActionListener((ActionEvent ae) -> {
+        	frame.dispose();
+        	new CustomerRegistrationGUI();
+      
+        	
+     	   
+      	  
+        });
 
         loginButton.addActionListener((ActionEvent e) -> {
             String username = userText.getText();
@@ -58,8 +72,16 @@ public class LoginGUI {
                 frame.dispose();
             	new MenuFrame();
             }
+  
             
         });
     }
+	public static void main(String[] args) {
+		
+		new LoginGUI();
+		
+		
+	}
+
 
 }

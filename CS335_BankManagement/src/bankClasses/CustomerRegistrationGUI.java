@@ -7,7 +7,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class CustomerRegistrationGUI {
-	public static void main(String args[]) {
+	
+	CustomerRegistrationGUI(){
+	
 
         //Creating the Frame
         JFrame frame = new JFrame("User Registration Frame");
@@ -23,7 +25,7 @@ public class CustomerRegistrationGUI {
         firstNameLabel.setBounds(10, 20, 80, 25);
         panel.add(firstNameLabel);
         JTextField firstText = new JTextField(12);
-        firstText.setBounds(130,20,165,25);
+        firstText.setBounds(100,20,165,25);
         panel.add(firstText);
 
         //Box for last name
@@ -31,7 +33,7 @@ public class CustomerRegistrationGUI {
         lastNameLabel.setBounds(10, 50, 80, 25);
         panel.add(lastNameLabel);
         JTextField lastText = new JTextField(12);
-        lastText.setBounds(130,50,165,25);
+        lastText.setBounds(100,50,165,25);
         panel.add(lastText);
 
         //Box for email
@@ -39,7 +41,7 @@ public class CustomerRegistrationGUI {
         emailLabel.setBounds(10, 80, 100, 25);
         panel.add(emailLabel);
         JTextField emailText = new JTextField(12);
-        emailText.setBounds(130,80,165,25);
+        emailText.setBounds(100,80,165,25);
         panel.add(emailText);
 
         //Box for DOB
@@ -47,7 +49,7 @@ public class CustomerRegistrationGUI {
         dobLabel.setBounds(10, 110, 80, 25);
         panel.add(dobLabel);
         JTextField dobText = new JTextField(12);
-        dobText.setBounds(130,110,165,25);
+        dobText.setBounds(100,110,165,25);
         panel.add(dobText);
 
         //Box for password
@@ -55,31 +57,12 @@ public class CustomerRegistrationGUI {
         passwordLabel.setBounds(10,140,80,25);
         panel.add(passwordLabel);
         JPasswordField passwordText = new JPasswordField(12);
-        passwordText.setBounds(130,140,165,25);
+        passwordText.setBounds(100,140,165,25);
         panel.add(passwordText);
-        
-      //Box for Account type
-        JLabel accountLabel1 = new JLabel("Account type");
-        JLabel accountLabel2 = new JLabel("(Checking/Saving)");
-        accountLabel1.setBounds(10,165,200,25);
-        accountLabel2.setBounds(10,175,200,25);
-        panel.add(accountLabel1);
-        panel.add(accountLabel2);
-        JTextField accountText = new JTextField(12);
-        accountText.setBounds(130,170,165,25);
-        panel.add(accountText);
-        
-      //Box for Account balance
-        JLabel balanceLabel = new JLabel("Account balance)");
-        balanceLabel.setBounds(10,200,120,25);
-        panel.add(balanceLabel);
-        JTextField balanceText = new JTextField(12);
-        balanceText.setBounds(130,200,165,25);
-        panel.add(balanceText);
 
         //Registration button
         JButton registrationButton = new JButton("Register");
-        registrationButton.setBounds(10,250,120,25);
+        registrationButton.setBounds(10, 170, 120, 25);
         panel.add(registrationButton);
 
         //Display message
@@ -96,6 +79,11 @@ public class CustomerRegistrationGUI {
             String email = emailText.getText();
             String dob = dobText.getText();
             String password = new String(passwordText.getPassword());
+            frame.dispose();
+        	new LoginGUI();
+      
+
+           
 
             if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || dob.isEmpty() || password.isEmpty()) {
                 // If any of the fields are empty, display an error message
@@ -120,8 +108,19 @@ public class CustomerRegistrationGUI {
      	       e1.printStackTrace();
      	      messageLabel.setText("Error occurred while writing to file");}
             }
+     	
+
+
             
         });
-    }
+        
+	}
+        public static void main(String[] args) {
+    		
+    		new CustomerRegistrationGUI();
+    		
+    		
+    	}
+
 
 }
