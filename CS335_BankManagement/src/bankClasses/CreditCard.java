@@ -7,14 +7,15 @@ abstract class CreditCard {
     protected int balance;
     protected int limit;
     protected Customer owner;
+    protected String username;
     protected int cvv;
     protected String status;
 
-    public CreditCard(String card_number, int balance, int limit, int cvv, Customer owner){
+    public CreditCard(String card_number, int balance, int limit, int cvv, String username){
         this.card_number = card_number;
         this.balance = balance;
         this.limit = limit;
-        this.owner = owner;
+        this.username = username;
     }
 
     public abstract String validateCardType(String card_number);

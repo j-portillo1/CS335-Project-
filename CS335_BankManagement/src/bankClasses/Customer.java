@@ -11,7 +11,6 @@ class Customer{
 	protected String password;
 	protected ArrayList<Account> accList;
 	
-    private static int customerIDCounter = 1; 
 	
 	Customer(String firstName, String lastName, String email, Date birthday, String customerID, String password){
 		this.firstName = firstName;
@@ -38,6 +37,7 @@ class Customer{
 	public void addAccount(Account cusAcc) {
 		accList.add(cusAcc);
 	}
+	
 	
 	public void setPassword(String password) {
 		this.password = password;

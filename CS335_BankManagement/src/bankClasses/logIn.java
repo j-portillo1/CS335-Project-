@@ -1,38 +1,14 @@
 package bankClasses;
 
 import java.util.*;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.text.ParseException;
 
 class logIn{
-	protected HashMap<String, String> userPasswords;
     private int maxAttempts = 3;
+    private ArrayList<Customer> customerList;
     
     public logIn() {
-        userPasswords = new HashMap<>();
-        loadUserCredentials("data/CustomerList.csv");
-    }
-    
-    public void addUser(String username, String password) {
-        userPasswords.put(username, password);  
-    }
-    
-    public boolean login(String username, String password) {
-        
-        if(!userPasswords.containsKey(username)) {
-            System.out.println("Username does not exist"); 
-            return false;
-        }
-        
-        String storedPassword = userPasswords.get(username);
-        
-        if(!password.equals(storedPassword)) {
-            System.out.println("Incorrect password");
-            return false; 
-        }
-        
-        return true;
+		this.customerList = implementCustomerList();
     }
     
     public void authenticateUser() {
@@ -58,26 +34,42 @@ class logIn{
         scanner.close();
         System.out.println("Max attempts exceeded"); 
     }
-    private void loadUserCredentials(String filename) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
-            // Skip the header line
-            reader.readLine();
-
-            // Read remaining lines
-            String line;
-            while ((line = reader.readLine()) != null) {
-                // Split the line by commas
-                String[] parts = line.split(",");
-
-                // Ensure the line has enough elements (username and password)
-                if (parts.length >= 6) {
-                    String username = parts[4].trim(); // Extract username from the 5th element
-                    String password = parts[5].trim(); // Extract password from the 6th element
-                    userPasswords.put(username, password);
-                }
+    public ArrayList<Customer> implementCustomerList(){
+		ArrayList<Customer> cusList = new ArrayList<Customer>();
+		CustomerFactory cF = new CustomerFactory("data/CustomerList.csv");
+		try {
+            while (cF.hasMoreData()) {
+            	cusList.add(cF.getNextCustomer());
             }
-        } catch (IOException e) {
+            return cusList;
+        } catch (ParseException e) {
             e.printStackTrace();
         }
+        return null; 
     }
+    
+    public Customer getLoggedInCustomer(String username) {
+    	for (Customer customer : customerList) {
+            if (customer.getCustomerID().equals(username)) {
+                return customer;
+            }
+        }
+        return null;
+    }
+    
+    public boolean login(String username, String password) {
+        Customer loggedInCustomer = this.getLoggedInCustomer(username);
+        if (loggedInCustomer != null) {
+            if (loggedInCustomer.getPassword().equals(password)) {
+                System.out.println("Login successful!");
+                return true;
+            } else {
+                System.out.println("Incorrect password");
+            }
+        } else {
+            System.out.println("Username does not exist");
+        }
+        return false;
+    }
+    
 }
