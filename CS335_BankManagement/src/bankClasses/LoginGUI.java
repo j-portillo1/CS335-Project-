@@ -68,11 +68,12 @@ public class LoginGUI {
             } else {
                 // Attempt to log in using the provided username and password
                 boolean loginSuccessful = loginHandler.login(username, password);
+                Customer loginCus = loginHandler.getLoggedInCustomer(username);
                 if (loginSuccessful) {
                     messageLabel.setForeground(Color.BLUE);
                     messageLabel.setText("Login successful!");
                     frame.dispose();
-                    new MenuFrame();
+                    new MenuFrame(loginCus);
                 } else {
                     messageLabel.setForeground(Color.RED);
                     messageLabel.setText("Incorrect username or password");
