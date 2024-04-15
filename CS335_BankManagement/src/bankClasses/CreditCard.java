@@ -8,6 +8,7 @@ abstract class CreditCard {
     protected int limit;
     protected Customer owner;
     protected int cvv;
+    protected String status;
 
     public CreditCard(String card_number, int balance, int limit, int cvv, Customer owner){
         this.card_number = card_number;
@@ -28,6 +29,10 @@ abstract class CreditCard {
 
     public  String getPersonals(){
     	return this.owner.toString();
+    }
+    
+    public void changeStatus(String s) {
+    	this.status = s;
     }
 
 }
