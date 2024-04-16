@@ -12,8 +12,12 @@ public class ATMGUI {
     private JTextField cardNumberField;
     private JPasswordField cvvField;
     private JButton insertButton;
-
-    public ATMGUI() {
+    
+    private ATM atmHandler;
+    
+    ATMGUI() {
+    	atmHandler = new ATM();
+    	
         frame = new JFrame("ATM");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(400, 200);
@@ -44,13 +48,13 @@ public class ATMGUI {
                 String cvv = new String(cvvField.getPassword());
 
                 // Validate the card and CVV using the ATM class
-                boolean isValid = ATM.validateCard(cardNumber, Integer.parseInt(cvv), cardType, "data/CustomerCreditCardList.csv");
-
+                boolean isValid = atmHandler.validateCard(cardNumber, Integer.parseInt(cvv), cardType, "data/CustomerCreditCardList.csv");
+                Customer creditCustomer = atmHandler.findCustomer(ATM.customerID);
                 // Display appropriate message based on validation result
                 if (isValid) {
                     JOptionPane.showMessageDialog(frame, "Login successful!");
                     frame.dispose(); // Close the ATM GUI
-                    new MenuFrame(); // Open the menu
+                    new MenuFrame(creditCustomer); // Open the menu
                 } else {
                     JOptionPane.showMessageDialog(frame, "Login failed. Please try again.");
                 }
