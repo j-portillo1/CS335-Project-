@@ -2,6 +2,8 @@ package bankClasses;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.FileWriter;
 //import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -81,9 +83,8 @@ public class CustomerRegistrationGUI {
             String password = new String(passwordText.getPassword());
             frame.dispose();
         	new LoginGUI();
-      
+        	
 
-           
 
             if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || dob.isEmpty() || password.isEmpty()) {
                 // If any of the fields are empty, display an error message
@@ -91,6 +92,30 @@ public class CustomerRegistrationGUI {
             } else {
                 messageLabel.setForeground(Color.blue);
                 messageLabel.setText("Registration successful!");
+                
+                try {
+                    String firstColumn;
+                    String secondColumn;
+                    FileReader reader = new FileReader("data/CustomerList.csv");
+                    BufferedReader buffReader = new BufferedReader(reader);
+                    		
+                    String fline;
+                    while((fline =buffReader.readLine() ) != null) {
+            			String[] columns = fline.split(",");
+            			if (columns.length >= 2) {
+                    		firstColumn = columns[0].trim();
+                    		secondColumn = columns[0].trim();
+            				if((firstName.equals(firstColumn)) & (lastName.equals(secondColumn))){
+                    			System.out.println("Customer Account already exist. Please login with your credentials");}
+            					}
+
+            				}
+            				buffReader.close();
+            			}catch(IOException er){
+            				er.printStackTrace();
+            			}
+                    			
+                    			
             
             
           //File file = new File("data/CustomerList.csv");		
