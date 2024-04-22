@@ -11,7 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CreditCardRegistration {
-    public static void main(String args[]) {
+    CreditCardRegistration() {
     	
     	JFrame frame = new JFrame("Credit Card Registration Frame");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -242,5 +242,8 @@ public class CreditCardRegistration {
         Pattern pattern = Pattern.compile(zipRegex);
         Matcher matcher = pattern.matcher(zipCode);
         return matcher.matches();
+    }
+    public static void main(String args[]) {
+    	new CreditCardRegistration();
     }
 }
