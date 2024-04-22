@@ -10,12 +10,10 @@ import javax.swing.*;
 public class MenuFrame extends JFrame implements ActionListener{
 
 	JMenuBar menuBar;
-	JMenu homeMenu;
 	JMenu accountsMenu;
-	JMenu helpMenu;
-	JButton creditCardItem;
-	JMenuItem documentsItem;
+	JButton creditCardMenu;
 	JMenuItem logOutItem;
+	
 	ImageIcon creditCardIcon;
 	ImageIcon documentsIcon;
 	ImageIcon logOutIcon;
@@ -27,48 +25,34 @@ public class MenuFrame extends JFrame implements ActionListener{
 		this.loggedInCustomer = loginCus; // Store the logged-in customer
 		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setSize(300,400);
+		this.setSize(400,400);
 		this.setLayout(new FlowLayout());
 		
 		menuBar = new JMenuBar();
-		
-		homeMenu = new JMenu("Home");
 		accountsMenu = new JMenu("Accounts");
-		helpMenu = new JMenu("Help");
+		
 		
 		creditCardIcon = new ImageIcon("data/creditcard.png");
 		Image image = creditCardIcon.getImage();
 		Image newimg = image.getScaledInstance(20, 20,  java.awt.Image.SCALE_SMOOTH);
-		creditCardItem = new JButton("Open Credit Card", new ImageIcon(newimg));
+		creditCardMenu = new JButton("Open Credit Card", new ImageIcon(newimg));
 		
-		documentsIcon = new ImageIcon("data/document-icon.png");
-		Image image2 = documentsIcon.getImage();
-		Image newimg2 = image2.getScaledInstance(20, 20,  java.awt.Image.SCALE_SMOOTH);
-		documentsItem = new JMenuItem("Documents", new ImageIcon(newimg2));
 		
 		logOutIcon = new ImageIcon("data/log-out-icon.png");
 		Image image3 = logOutIcon.getImage();
 		Image newimg3 = image3.getScaledInstance(20, 20,  java.awt.Image.SCALE_SMOOTH);
 		logOutItem = new JMenuItem("Log Out", new ImageIcon(newimg3));
 		
-		creditCardItem.addActionListener(this);
-		documentsItem.addActionListener(this);
+		creditCardMenu.addActionListener(this);
+		
 		logOutItem.addActionListener(this);
 		
-		homeMenu.setMnemonic(KeyEvent.VK_F);
-		accountsMenu.setMnemonic(KeyEvent.VK_E);
-		helpMenu.setMnemonic(KeyEvent.VK_H);
-		creditCardItem.setMnemonic(KeyEvent.VK_L);
-		documentsItem.setMnemonic(KeyEvent.VK_S);
-		logOutItem.setMnemonic(KeyEvent.VK_E);
 		
-		homeMenu.add(creditCardItem);
-		homeMenu.add(documentsItem);
-		homeMenu.add(logOutItem);
 		
-		menuBar.add(homeMenu);
+		
 		menuBar.add(accountsMenu);
-		menuBar.add(helpMenu);
+		menuBar.add(creditCardMenu);
+		menuBar.add(logOutItem);
 		
 		this.setJMenuBar(menuBar);
 		
@@ -83,11 +67,9 @@ public class MenuFrame extends JFrame implements ActionListener{
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == creditCardItem) {
+		if(e.getSource() == creditCardMenu) {
 			System.out.println("Opening Credit Card Registration...");
 			new CreditCardRegistration();
-		} else if(e.getSource() == documentsItem) {
-			System.out.println("Viewing statements and documents...");
 		} else if(e.getSource() == logOutItem) {
 			System.out.println("Logging out...");
 			System.exit(0);
