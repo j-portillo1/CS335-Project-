@@ -47,4 +47,22 @@ class Account{
 		return("Account Number: " + this.accNum + ", type: " + this.accType + ", balance: " + this.accBal + ", customer ID: "+ this.customerID);
 	}
 	
+	public void withdraw(double amount) { // Updated to accept double
+        if (amount > 0 && amount <= accBal) {
+            accBal -= amount;
+            System.out.println("Withdrawal of $" + amount + " successful. Current balance: $" + accBal);
+        } else {
+            System.out.println("Invalid withdrawal amount or insufficient balance.");
+        }
+    }
+
+    public void insert(double amount) { // Added insert method, accepts double
+        if (amount > 0) {
+            accBal += amount;
+            System.out.println("Insertion of $" + amount + " successful. Current balance: $" + accBal);
+        } else {
+            System.out.println("Invalid insertion amount.");
+        }
+    }
+	
 }

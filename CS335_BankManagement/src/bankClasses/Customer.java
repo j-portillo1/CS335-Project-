@@ -64,4 +64,40 @@ class Customer{
 	public String toString() {
 		return("Name: "+ this.firstName + " "+ this.lastName + " ,email: " + this.email + " ,customer ID: "+ this.customerID);
 	}
+	
+	public void withdrawFromChecking(double amount) {
+        Account checkingAccount = getCheckingAccount();
+        if (checkingAccount != null) {
+            checkingAccount.withdraw(amount);
+        } else {
+            System.out.println("No checking account found for the customer.");
+        }
+    }
+
+    public void insertIntoChecking(double amount) {
+        Account checkingAccount = getCheckingAccount();
+        if (checkingAccount != null) {
+            checkingAccount.insert(amount);
+        } else {
+            System.out.println("No checking account found for the customer.");
+        }
+    }
+
+    public void withdrawFromSaving(double amount) {
+        Account savingAccount = getSavingAccount();
+        if (savingAccount != null) {
+            savingAccount.withdraw(amount);
+        } else {
+            System.out.println("No saving account found for the customer.");
+        }
+    }
+
+    public void insertIntoSaving(double amount) {
+        Account savingAccount = getSavingAccount();
+        if (savingAccount != null) {
+            savingAccount.insert(amount);
+        } else {
+            System.out.println("No saving account found for the customer.");
+        }
+    }
 }
