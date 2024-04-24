@@ -2,7 +2,6 @@ package bankClasses;
 
 import java.awt.FlowLayout;
 import java.awt.Image;
-import java.awt.event.*;
 import java.util.Date;
 
 import javax.swing.*;
@@ -10,14 +9,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Date;
+
 
 public class MenuFrame extends JFrame implements ActionListener {
 
     JMenuBar menuBar;
     JMenu accountsMenu;
-    JMenuItem homeMenuItem; // New menu item for the Home page
-    JButton creditCardMenu;
+    JMenuItem homeMenuItem;
     JMenuItem logOutItem;
 
     ImageIcon creditCardIcon;
@@ -32,7 +30,7 @@ public class MenuFrame extends JFrame implements ActionListener {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(400, 400);
         this.setLayout(new FlowLayout());
-        
+
         homeMenuItem = new JMenuItem("Home");
         homeMenuItem.addActionListener(this);
 
@@ -40,21 +38,19 @@ public class MenuFrame extends JFrame implements ActionListener {
         accountsMenu = new JMenu("Accounts");
 
         creditCardIcon = new ImageIcon("data/creditcard.png");
-        Image image = creditCardIcon.getImage();
-        Image newimg = image.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
-        creditCardMenu = new JButton("Open Credit Card", new ImageIcon(newimg));
+        Image image = creditCardIcon.getImage().getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
+        JMenuItem creditCardMenuItem = new JMenuItem("Credit Card", new ImageIcon(image));
 
         logOutIcon = new ImageIcon("data/log-out-icon.png");
-        Image image3 = logOutIcon.getImage();
-        Image newimg3 = image3.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
-        logOutItem = new JMenuItem("Log Out", new ImageIcon(newimg3));
+        Image image3 = logOutIcon.getImage().getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
+        logOutItem = new JMenuItem("Log Out", new ImageIcon(image3));
 
-        creditCardMenu.addActionListener(this);
+        creditCardMenuItem.addActionListener(this);
         logOutItem.addActionListener(this);
-        
-        menuBar.add(homeMenuItem); // Add Home menu item to the menu bar
+
+        menuBar.add(homeMenuItem);
         menuBar.add(accountsMenu);
-        menuBar.add(creditCardMenu);
+        menuBar.add(creditCardMenuItem);
         menuBar.add(logOutItem);
 
         this.setJMenuBar(menuBar);
@@ -63,7 +59,7 @@ public class MenuFrame extends JFrame implements ActionListener {
         accountInfoPanel.setLayout(new BoxLayout(accountInfoPanel, BoxLayout.Y_AXIS));
         addAccountInfo();
         add(accountInfoPanel);
-        
+
         displayHomePage();
 
         this.setVisible(true);
@@ -71,60 +67,47 @@ public class MenuFrame extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == homeMenuItem) { // If Home menu item is clicked
-            displayHomePage(); // Display the Home page
-        } else if (e.getSource() == creditCardMenu) {
-            System.out.println("Opening Credit Card Registration...");
-            new CreditCardRegistration();
+        if (e.getSource() == homeMenuItem) {
+            displayHomePage();
+        } else if (e.getActionCommand().equals("Credit Card")) {
+            System.out.println("Opening Credit Card Page...");
+            new CreditCardPageGUI(loggedInCustomer);
         } else if (e.getSource() == logOutItem) {
             System.out.println("Logging out...");
             System.exit(0);
         }
     }
 
-    // Method to display the Home page
     private void displayHomePage() {
-        // Clear the panel
         accountInfoPanel.removeAll();
-             
-        // Re-add the account information
         addAccountInfo();
-        
-        // Change appearance of "Home" menu item
-        homeMenuItem.setForeground(Color.BLUE); // Change text color
-        homeMenuItem.setFont(homeMenuItem.getFont().deriveFont(Font.BOLD)); // Make text bold
-        
-        // Repaint the panel
+        homeMenuItem.setForeground(Color.BLUE);
+        homeMenuItem.setFont(homeMenuItem.getFont().deriveFont(Font.BOLD));
         accountInfoPanel.revalidate();
         accountInfoPanel.repaint();
     }
 
-
     public void addAccountInfo() {
         for (Account acc : loggedInCustomer.getAccountList()) {
-        	JPanel accountPanel = new JPanel(); // Panel to hold account information
-            accountPanel.setLayout(new BorderLayout()); // Use BorderLayout for left and right alignment
-            
-            // Button for account type
+            JPanel accountPanel = new JPanel();
+            accountPanel.setLayout(new BorderLayout());
+
             JButton accountTypeButton = new JButton(acc.getAccType());
-            accountTypeButton.setEnabled(false); // Disable button to prevent interaction
-            accountPanel.add(accountTypeButton, BorderLayout.WEST); // Align to the left
-            
-            // Panel to hold account details (account number and balance)
-            JPanel detailsPanel = new JPanel(new GridLayout(2, 1)); // 2 rows, 1 column
-            detailsPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10)); // Add padding
-            
-            // Label for account number
+            accountTypeButton.setEnabled(false);
+            accountPanel.add(accountTypeButton, BorderLayout.WEST);
+
+            JPanel detailsPanel = new JPanel(new GridLayout(2, 1));
+            detailsPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+
             JLabel accountNumberLabel = new JLabel("Account Number: " + acc.getAccNum());
             detailsPanel.add(accountNumberLabel);
-            
-            // Label for account balance
+
             JLabel balanceLabel = new JLabel("Balance: " + acc.getAccBal());
             detailsPanel.add(balanceLabel);
-            
-            accountPanel.add(detailsPanel, BorderLayout.CENTER); // Align details to the right
-            
-            accountInfoPanel.add(accountPanel); // Add account panel to main panel
+
+            accountPanel.add(detailsPanel, BorderLayout.CENTER);
+
+            accountInfoPanel.add(accountPanel);
         }
     }
 

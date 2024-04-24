@@ -22,16 +22,23 @@ abstract class CreditCard {
     public  int getBalance(){
     	return this.balance;
     }
+    
+    public String getCardNumber() {
+    	return this.card_number;
+    }
 
     public  int getCreditLimit()
     {
     	return this.limit;
     }
-
+    
     public  String getPersonals(){
     	return this.owner.toString();
     }
     
+    public String getStatus() {
+    	return this.status;
+    }
     public void changeStatus(String s) {
     	this.status = s;
     }
