@@ -47,7 +47,7 @@ class Account{
 		return("Account Number: " + this.accNum + ", type: " + this.accType + ", balance: " + this.accBal + ", customer ID: "+ this.customerID);
 	}
 	
-	public void withdraw(double amount) { // Updated to accept double
+	public void withdraw(Integer amount) { // Updated to accept double
         if (amount > 0 && amount <= accBal) {
             accBal -= amount;
             System.out.println("Withdrawal of $" + amount + " successful. Current balance: $" + accBal);
@@ -56,7 +56,7 @@ class Account{
         }
     }
 
-    public void insert(double amount) { // Added insert method, accepts double
+    public void insert(Integer amount) { // Added insert method, accepts double
         if (amount > 0) {
             accBal += amount;
             System.out.println("Insertion of $" + amount + " successful. Current balance: $" + accBal);
