@@ -42,7 +42,17 @@ public class CreditCardPageGUI{
         // Display balance on a separate line
         JLabel cardBalLabel = new JLabel("Balance: " + customerCard.getBalance());
         panel.add(cardBalLabel);
-
+        
+        // Pay Balance
+        JButton balanceButton = new JButton("Paying balance");
+        balanceButton.addActionListener(e -> customerCard.payBalance(loginCustomer));
+        panel.add(balanceButton);
+        
+        // Deactivate card
+        JButton deactivateButton = new JButton("Deactivate your card");
+        deactivateButton.addActionListener(e -> customerCard.changeStatus("Inactive"));
+        panel.add(deactivateButton);
+       
         // Create a button to open a new credit card
         JButton openNewCardButton = new JButton("Open New Credit Card");
         openNewCardButton.addActionListener(e -> new CreditCardRegistration());

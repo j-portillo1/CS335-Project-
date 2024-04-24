@@ -48,7 +48,7 @@ class Account{
 	}
 	
 	public void withdraw(Integer amount) { // Updated to accept double
-        if (amount > 0 && amount <= accBal) {
+		if (amount > 0 && amount <= accBal) {
             accBal -= amount;
             System.out.println("Withdrawal of $" + amount + " successful. Current balance: $" + accBal);
         } else {
