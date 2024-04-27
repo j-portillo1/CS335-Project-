@@ -1,5 +1,6 @@
 package bankClasses;
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.BufferedReader;
@@ -7,6 +8,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 //import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class CustomerRegistrationGUI {
 	
@@ -53,18 +57,27 @@ public class CustomerRegistrationGUI {
         JTextField dobText = new JTextField(12);
         dobText.setBounds(100,110,165,25);
         panel.add(dobText);
+        
+      //Box for username
+        JLabel userNameLabel = new JLabel("Username");
+        userNameLabel.setBounds(10, 140, 80, 25);
+        panel.add(userNameLabel);
+        JTextField userNameText = new JTextField(12);
+        userNameText.setBounds(100,140,165,25);
+        panel.add(userNameText);
+        
 
         //Box for password
         JLabel passwordLabel = new JLabel("Password");
-        passwordLabel.setBounds(10,140,80,25);
+        passwordLabel.setBounds(10,170,80,25);
         panel.add(passwordLabel);
         JPasswordField passwordText = new JPasswordField(12);
-        passwordText.setBounds(100,140,165,25);
+        passwordText.setBounds(100,170,165,25);
         panel.add(passwordText);
 
         //Registration button
         JButton registrationButton = new JButton("Register");
-        registrationButton.setBounds(10, 170, 120, 25);
+        registrationButton.setBounds(10, 200, 120, 25);
         panel.add(registrationButton);
 
         //Display message
@@ -80,9 +93,23 @@ public class CustomerRegistrationGUI {
             String lastName = lastText.getText();
             String email = emailText.getText();
             String dob = dobText.getText();
+            Date birthday = null;
+			try {
+				birthday = parseDate(dob);
+			} catch (ParseException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+            String username = userNameText.getText();
             String password = new String(passwordText.getPassword());
             frame.dispose();
-        	new LoginGUI();
+            Customer newCustomer = new Customer(firstName, lastName, email, birthday, username, password);
+        	try {
+				new OpenBankAccountGUI(newCustomer);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
         	
 
 
@@ -114,35 +141,20 @@ public class CustomerRegistrationGUI {
             			}catch(IOException er){
             				er.printStackTrace();
             			}
-                    			
-                    			
-            
-            
-          //File file = new File("data/CustomerList.csv");		
-     	   try(FileWriter writer = new FileWriter("data/CustomerList.csv", true)){
-     	      //FileWriter output = new FileWriter( file );
-     	      //BufferedWriter writer = new BufferedWriter(output);
-     	        writer.append(firstName + ",");
-     	        writer.append(lastName + ",");
-     	        writer.append(email + ",");
-     	        writer.append(dob + ",");
-     	        writer.append(password + ",");
-     	        writer.append("\n");
-     	        
-     	    } catch(IOException e1){
-     	       e1.printStackTrace();
-     	      messageLabel.setText("Error occurred while writing to file");}
             }
-     	
-
-
             
         });
         
 	}
-        public static void main(String[] args) {
+	
+	private Date parseDate(String dateString) throws ParseException {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        return dateFormat.parse(dateString);
+	}
+
+    public static void main(String[] args) {
     		
-    		new CustomerRegistrationGUI();
+    	new CustomerRegistrationGUI();
     		
     		
     	}

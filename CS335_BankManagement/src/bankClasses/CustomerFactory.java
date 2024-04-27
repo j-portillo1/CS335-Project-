@@ -113,7 +113,7 @@ import java.util.Random;
                         pw.append("0" + ",");
                         pw.append("0" + ",");
                         pw.append(cusSavAcc.getAccNum() + ",");
-                        pw.append(Integer.toString(cusSavAcc.getAccBal()) + "\n");
+                        pw.append(cusSavAcc.getAccBal() + "\n");
                     } else {
                         pw.append("0" + ",");
                         pw.append("0" + ",");
@@ -152,22 +152,27 @@ import java.util.Random;
     Customer getNextCustomer() throws ParseException{
     	
     	Customer c; 
-    	Account a1;
-    	Account a2;
-    	if (sc.hasNextLine()) {
-    		String data = sc.nextLine();
-    		String[] arrOfStr = data.split(",", 10);
-    		c = new Customer(arrOfStr[0], arrOfStr[1], arrOfStr[2], parseDate(arrOfStr[3]), arrOfStr[4], arrOfStr[5]);
-    		a1 = new Account(Integer.parseInt(arrOfStr[6]), "Checking", Integer.parseInt(arrOfStr[7]), arrOfStr[4]);
-    		a2 = new Account(Integer.parseInt(arrOfStr[8]), "Saving", Integer.parseInt(arrOfStr[9]), arrOfStr[4]);
-    		c.addAccount(a1);
-    		c.addAccount(a2);
-    		return c;
+        Account a1;
+        Account a2;
+        if (sc.hasNextLine()) {
+            String data = sc.nextLine();
+            String[] arrOfStr = data.split(",", 10);
+            c = new Customer(arrOfStr[0], arrOfStr[1], arrOfStr[2], parseDate(arrOfStr[3]), arrOfStr[4], arrOfStr[5]);
+            // Create checking account only if account number is not 0
+            if (!arrOfStr[6].equals("0")) {
+                a1 = new Account(Integer.parseInt(arrOfStr[6]), "Checking", Integer.parseInt(arrOfStr[7]), arrOfStr[4]);
+                c.addAccount(a1);
+            }
+            // Create saving account only if account number is not 0
+            if (!arrOfStr[8].equals("0")) {
+                a2 = new Account(Integer.parseInt(arrOfStr[8]), "Saving", Integer.parseInt(arrOfStr[9]), arrOfStr[4]);
+                c.addAccount(a2);
+            }
+            return c;
+        } else {
+            c = new Customer("a", "b", "c", parseDate("01/01/1900"), "d", "e");
+        }
+        return c;
     	}
-    	else{
-    		c = new Customer("a", "b", "c", parseDate("01/01/1900"), "d", "e");
-    	}
-    	return(c);
     }
-}
 

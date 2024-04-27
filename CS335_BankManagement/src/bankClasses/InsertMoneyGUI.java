@@ -29,14 +29,14 @@ public class InsertMoneyGUI {
         moneyText.setBounds(300, 20, 175, 25);
         panel.add(moneyText);
 
-        JLabel accNameLabel = new JLabel("Choose account you want to insert (Checking/Saving): ");
+        JLabel accNameLabel = new JLabel("Choose account you want to deposit (Checking/Saving): ");
         accNameLabel.setBounds(10, 50, 350, 25);
         panel.add(accNameLabel);
         JTextField accText = new JTextField(12);
         accText.setBounds(360, 50, 175, 25);
         panel.add(accText);
 
-        JButton insertButton = new JButton("Insert");
+        JButton insertButton = new JButton("Deposit");
         insertButton.setBounds(10, 100, 120, 25);
         panel.add(insertButton);
 
