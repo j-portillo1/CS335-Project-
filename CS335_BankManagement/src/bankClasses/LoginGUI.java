@@ -57,6 +57,7 @@ public class LoginGUI {
             frame.dispose();
             new CustomerRegistrationGUI();
         });
+        
 
         loginButton.addActionListener((ActionEvent e) -> {
             String username = userText.getText();
