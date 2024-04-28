@@ -46,7 +46,7 @@ abstract class CreditCard {
     public void payBalance(Customer cus) {
     	Account cusAcc = cus.getCheckingAccount();
         if (this.balance > 0) {
-            cusAcc.withdraw(this.balance);
+            cusAcc.withdraw(this.balance, cus);
             this.balance = 0;
         } else {
             System.out.println("No balance due. Payment not required.");

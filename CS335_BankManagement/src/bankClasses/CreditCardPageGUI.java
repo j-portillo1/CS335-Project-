@@ -43,14 +43,33 @@ public class CreditCardPageGUI{
         JLabel cardBalLabel = new JLabel("Balance: " + customerCard.getBalance());
         panel.add(cardBalLabel);
         
+        //Display status
+        JLabel cardStatusLabel = new JLabel("Status: " + customerCard.getStatus());
+        panel.add(cardStatusLabel);
+        
+        
         // Pay Balance
         JButton balanceButton = new JButton("Paying balance");
-        balanceButton.addActionListener(e -> customerCard.payBalance(loginCustomer));
+        balanceButton.addActionListener(e -> {
+        	
+        	customerCard.payBalance(loginCustomer);
+        	creditHandler.updateCreditCardInfo(loginCustomer, "paying");
+        	// Update balance label with new balance
+            cardBalLabel.setText("Balance: " + customerCard.getBalance());
+        
+        });
         panel.add(balanceButton);
         
         // Deactivate card
         JButton deactivateButton = new JButton("Deactivate your card");
-        deactivateButton.addActionListener(e -> customerCard.changeStatus("Inactive"));
+        deactivateButton.addActionListener(e -> {
+        	
+        	customerCard.changeStatus("Inactive");
+        	creditHandler.updateCreditCardInfo(loginCustomer, "deactivate");
+         // Update status label with new status
+            cardStatusLabel.setText("Status: " + customerCard.getStatus());
+        	}
+        );
         panel.add(deactivateButton);
        
         // Create a button to open a new credit card

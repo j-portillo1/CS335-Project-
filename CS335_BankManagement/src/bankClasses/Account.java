@@ -1,5 +1,11 @@
 package bankClasses;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+
 class Account{
 	
 	protected int accNum;
@@ -47,22 +53,81 @@ class Account{
 		return("Account Number: " + this.accNum + ", type: " + this.accType + ", balance: " + this.accBal + ", customer ID: "+ this.customerID);
 	}
 	
-	public void withdraw(Integer amount) { // Updated to accept double
-		if (amount > 0 && amount <= accBal) {
-            accBal -= amount;
-            System.out.println("Withdrawal of $" + amount + " successful. Current balance: $" + accBal);
-        } else {
-            System.out.println("Invalid withdrawal amount or insufficient balance.");
-        }
-    }
+	public void withdraw(Integer amount, Customer cus) { // Updated to accept double
+	    if (amount > 0 && amount <= accBal) {
+	        accBal -= amount;
+	        System.out.println("Withdrawal of $" + amount + " successful. Current balance: $" + accBal);
+	        try (BufferedReader reader = new BufferedReader(new FileReader("data/CustomerList.csv"))) {
+	            String line;
+	            StringBuilder updatedFileContent = new StringBuilder(); // Declare StringBuilder to store updated file content
+	            
+	            // Read and append the header line
+	            String header = reader.readLine();
+	            updatedFileContent.append(header).append("\n");
+	            
+	            while ((line = reader.readLine()) != null) {
+	                String[] parts = line.split(",");
+	                if (parts.length >= 10) { // Ensure the line has enough elements
+	                    String stored_customerID = parts[4].trim();
+	                    if (stored_customerID.equals(cus.getCustomerID())) {
+	                        parts[7] = Integer.toString(accBal);
+	                    }
+	                }
+	                // Reconstruct the line with modified parts
+	                updatedFileContent.append(String.join(",", parts)).append("\n");
+	            }
 
-    public void insert(Integer amount) { // Added insert method, accepts double
-        if (amount > 0) {
-            accBal += amount;
-            System.out.println("Insertion of $" + amount + " successful. Current balance: $" + accBal);
-        } else {
-            System.out.println("Invalid insertion amount.");
-        }
-    }
+	            // Write the updated content back to the file
+	            try (BufferedWriter writer = new BufferedWriter(new FileWriter("data/CustomerList.csv"))) {
+	                writer.write(updatedFileContent.toString());
+	            }
+	        } catch (IOException e) {
+	            System.out.println("Customer not found in database.");
+	            e.printStackTrace();
+	        }
+	    } else {
+	        System.out.println("Invalid withdrawal amount or insufficient balance.");
+	    }
+	}
+
+
+	public void insert(Integer amount, Customer cus) { // Added insert method, accepts double
+	    if (amount > 0) {
+	        accBal += amount;
+	        System.out.println("Insertion of $" + amount + " successful. Current balance: $" + accBal);
+	        try (BufferedReader reader = new BufferedReader(new FileReader("data/CustomerList.csv"))) {
+	            String line;
+	            StringBuilder updatedFileContent = new StringBuilder(); // Declare StringBuilder to store updated file content
+	            
+	            // Read and append the header line
+	            String header = reader.readLine();
+	            updatedFileContent.append(header).append("\n");
+	            
+	            // Process the remaining lines
+	            while ((line = reader.readLine()) != null) {
+	                String[] parts = line.split(",");
+	                if (parts.length >= 10) { // Ensure the line has enough elements
+	                    String stored_customerID = parts[4].trim();
+	                    if (stored_customerID.equals(cus.getCustomerID())) {
+	                        parts[7] = Integer.toString(accBal);
+	                    }
+	                }
+	                // Reconstruct the line with modified parts
+	                updatedFileContent.append(String.join(",", parts)).append("\n");
+	            }
+
+	            // Write the updated content back to the file
+	            try (BufferedWriter writer = new BufferedWriter(new FileWriter("data/CustomerList.csv"))) {
+	                writer.write(updatedFileContent.toString());
+	            }
+	        } catch (IOException e) {
+	            System.out.println("Customer not found in database.");
+	            e.printStackTrace();
+	        }
+	    } else {
+	        System.out.println("Invalid insertion amount.");
+	    }
+	}
+
 	
 }

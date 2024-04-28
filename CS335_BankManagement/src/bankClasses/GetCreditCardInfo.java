@@ -1,7 +1,9 @@
 package bankClasses;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 
 public class GetCreditCardInfo{
@@ -50,6 +52,43 @@ public class GetCreditCardInfo{
 	        e.printStackTrace();
 	    }
 	    return card; // Return null if customer not found
+	}
+	
+	public void updateCreditCardInfo(Customer loginCustomer, String action) {
+		try (BufferedReader reader = new BufferedReader(new FileReader("data/CustomerCreditCardList.csv"))) {
+	        String line;
+	        StringBuilder updatedFileContent = new StringBuilder(); // Declare StringBuilder to store updated file content
+            
+            // Read and append the header line
+            String header = reader.readLine();
+            updatedFileContent.append(header).append("\n");
+            
+	        while ((line = reader.readLine()) != null) {
+	            String[] parts = line.split(",");
+	            if (parts.length >= 6) { // Ensure the line has enough elements
+	                String stored_customerID = parts[0].trim();
+	                if (stored_customerID.equals(loginCustomer.getCustomerID())) {
+	                	switch (action.toLowerCase()) {
+                        case "paying":
+                        	parts[4] = Integer.toString(0);
+                        	break;
+                        case "deactivate":
+                        	parts[6] = "Inactive";
+                            break;
+	                	}
+	                }
+	            }
+	         // Reconstruct the line with modified parts
+	            updatedFileContent.append(String.join(",", parts)).append("\n");
+	        }
+
+	        // Write the updated content back to the file
+	        try (BufferedWriter writer = new BufferedWriter(new FileWriter("data/CustomerCreditCardList.csv"))) {
+	            writer.write(updatedFileContent.toString());}
+	    } catch (IOException e) {
+	        System.out.println("Customer not found in database.");
+	        e.printStackTrace();
+	    }
 	}
 
 }

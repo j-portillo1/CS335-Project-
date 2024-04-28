@@ -64,7 +64,7 @@ public class InsertMoneyGUI {
 
                 if (account != null) {
                     Integer amount = Integer.parseInt(money);
-                    account.insert(amount);
+                    account.insert(amount, this.loginCustomer);
                     messageLabel.setText("Money inserted successfully.");
                 } else {
                     messageLabel.setText("No account found. Please check your account type.");
