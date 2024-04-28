@@ -79,7 +79,12 @@ public class GetCreditCardInfo{
 	                }
 	            }
 	         // Reconstruct the line with modified parts
-	            updatedFileContent.append(String.join(",", parts)).append("\n");
+                updatedFileContent.append(String.join(",", parts));
+                
+                // Append newline character if it's not the last line
+                if (reader.ready()) {
+                    updatedFileContent.append("\n");
+                }	       
 	        }
 
 	        // Write the updated content back to the file

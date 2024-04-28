@@ -149,26 +149,25 @@ public class OpenBankAccountGUI {
                     pw.append(cusCheckAcc.getAccNum() + ",");
                     pw.append(cusCheckAcc.getAccBal() + ",");
                     pw.append(cusSavAcc.getAccNum() + ",");
-                    pw.append(cusSavAcc.getAccBal() +"\n");
+                    pw.append(Integer.toString(cusSavAcc.getAccBal()));
                 } else {
                     if (customer.getCheckingAccount()!=null) {
                         Account cusCheckAcc = customer.getCheckingAccount();
-                        pw.append(cusCheckAcc.getAccNum() + ",");
+                        pw.append(cusCheckAcc.getAccNum() + ","); 
                         pw.append(cusCheckAcc.getAccBal() + ",");
                         pw.append("0" + ",");
-                        pw.append("0" + "\n");
+                        pw.append("0");
                     } else if (customer.getSavingAccount()!=null) {
                         Account cusSavAcc = customer.getSavingAccount();
                         pw.append("0" + ",");
                         pw.append("0" + ",");
                         pw.append(cusSavAcc.getAccNum() + ",");
                         pw.append(Integer.toString(cusSavAcc.getAccBal()));
-                        pw.append("\n");
                     } else {
                         pw.append("0" + ",");
                         pw.append("0" + ",");
                         pw.append("0" + ",");
-                        pw.append("0" + "\n");
+                        pw.append("0");
                     }
                 }
             } catch (IOException e2) {

@@ -74,8 +74,12 @@ class Account{
 	                    }
 	                }
 	                // Reconstruct the line with modified parts
-	                updatedFileContent.append(String.join(",", parts)).append("\n");
-	            }
+	                updatedFileContent.append(String.join(",", parts));
+	                
+	                // Append newline character if it's not the last line
+	                if (reader.ready()) {
+	                    updatedFileContent.append("\n");
+	                }	            }
 
 	            // Write the updated content back to the file
 	            try (BufferedWriter writer = new BufferedWriter(new FileWriter("data/CustomerList.csv"))) {
@@ -107,13 +111,18 @@ class Account{
 	            while ((line = reader.readLine()) != null) {
 	                String[] parts = line.split(",");
 	                if (parts.length >= 10) { // Ensure the line has enough elements
-	                    String stored_customerID = parts[4].trim();
+	                    String stored_customerID = parts[0].trim();
 	                    if (stored_customerID.equals(cus.getCustomerID())) {
-	                        parts[7] = Integer.toString(accBal);
+	                        parts[6] = Integer.toString(accBal);
 	                    }
 	                }
 	                // Reconstruct the line with modified parts
-	                updatedFileContent.append(String.join(",", parts)).append("\n");
+	                updatedFileContent.append(String.join(",", parts));
+	                
+	                // Append newline character if it's not the last line
+	                if (reader.ready()) {
+	                    updatedFileContent.append("\n");
+	                }
 	            }
 
 	            // Write the updated content back to the file
@@ -128,6 +137,7 @@ class Account{
 	        System.out.println("Invalid insertion amount.");
 	    }
 	}
+
 
 	
 }
