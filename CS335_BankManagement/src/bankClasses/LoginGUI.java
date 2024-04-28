@@ -47,7 +47,7 @@ public class LoginGUI {
 
         // Display message
         JLabel messageLabel = new JLabel();
-        messageLabel.setBounds(100, 250, 250, 35);
+        messageLabel.setBounds(50, 200, 400, 100);
         messageLabel.setFont(new Font(null, Font.ITALIC, 20));
         panel.add(messageLabel);
 
