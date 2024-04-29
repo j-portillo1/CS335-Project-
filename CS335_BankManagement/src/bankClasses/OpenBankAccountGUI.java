@@ -3,9 +3,13 @@ package bankClasses;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Random;
@@ -19,9 +23,12 @@ import javax.swing.JTextField;
 public class OpenBankAccountGUI {
     
     private Customer customer;
+    private ArrayList<Customer> customerList;
 
-    OpenBankAccountGUI(Customer newCustomer) throws IOException {
+    OpenBankAccountGUI(Customer newCustomer) throws IOException, ParseException {
         this.customer = newCustomer;
+        this.customerList = findCustomerList();
+        
         // Creating the Frame
         JFrame frame = new JFrame("Open Bank Account");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -76,6 +83,11 @@ public class OpenBankAccountGUI {
         messageLabel.setBounds(250, 200, 250, 35);
         messageLabel.setFont(new Font(null, Font.ITALIC, 20));
         panel.add(messageLabel);
+        
+        // Back button
+        JButton backButton = new JButton("Back");
+        backButton.setBounds(150, 150, 80, 25);
+        panel.add(backButton);
 
         frame.setVisible(true);
 
@@ -113,66 +125,61 @@ public class OpenBankAccountGUI {
                     || (saving.equals("Yes") && savingBalStr.isEmpty())) {
                 messageLabel.setText("Please fill in all fields");
             } else {
+            	
+            	// Check if the customer exists
+                boolean customerExists = false;
+                Customer existingCustomer = null;
+                for (Customer c : customerList) {
+                    if (c.getCustomerID().equals(customer.getCustomerID())) {
+                        customerExists = true;
+                        existingCustomer = c;
+                        break;
+                    }
+                }
+                
                 // Successfully created account
-                if (checking.equals("Yes")) {
+                if (checking.equals("Yes") && customer.getCheckingAccount()==null) {
                     int accCheckingNum = generateAccountNumber();
                     int checkingDeposit = Integer.parseInt(checkingBalStr);
                     Account checkingAccount = new Account(accCheckingNum, "Checking", checkingDeposit,
                             customer.getCustomerID());
                     customer.addAccount(checkingAccount);
+                    if (customerExists) {
+                        existingCustomer.addAccount(checkingAccount);
+                        writeCurrentCustomer(existingCustomer,"checking");
+                    }
                 }
-                if (saving.equals("Yes")) {
+                if (saving.equals("Yes")&& customer.getSavingAccount()==null) {
                     int accSavingNum = generateAccountNumber();
                     int savingDeposit = Integer.parseInt(savingBalStr);
                     Account savingAccount = new Account(accSavingNum, "Saving", savingDeposit,
                             customer.getCustomerID());
                     customer.addAccount(savingAccount);
+                    if (customerExists) {
+                        existingCustomer.addAccount(savingAccount);
+                        writeCurrentCustomer(existingCustomer,"saving");
+                    }
                 }
+                if (!customerExists) {
+                	writeNewCustomer(customer);}
+                
+                
                 messageLabel.setText("Successfully created account(s)");
             }
             
-            try (FileWriter pw = new FileWriter("data/CustomerList.csv", true)) {
-            	
-            	SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-            	String formattedDate = dateFormat.format(customer.getDOB());
-            	pw.append("\n");
-                pw.append(customer.getFirstName() + ",");
-                pw.append(customer.getLastName() + ",");
-                pw.append(customer.getEmail() + ",");
-                pw.append(formattedDate + ",");
-                pw.append(customer.getCustomerID() + ",");
-                pw.append(customer.getPassword() + ",");
-
-                if (customer.getCheckingAccount()!=null&& customer.getSavingAccount()!=null) {
-                    Account cusCheckAcc = customer.getCheckingAccount();
-                    Account cusSavAcc = customer.getSavingAccount();
-                    pw.append(cusCheckAcc.getAccNum() + ",");
-                    pw.append(cusCheckAcc.getAccBal() + ",");
-                    pw.append(cusSavAcc.getAccNum() + ",");
-                    pw.append(Integer.toString(cusSavAcc.getAccBal()));
-                } else {
-                    if (customer.getCheckingAccount()!=null) {
-                        Account cusCheckAcc = customer.getCheckingAccount();
-                        pw.append(cusCheckAcc.getAccNum() + ","); 
-                        pw.append(cusCheckAcc.getAccBal() + ",");
-                        pw.append("0" + ",");
-                        pw.append("0");
-                    } else if (customer.getSavingAccount()!=null) {
-                        Account cusSavAcc = customer.getSavingAccount();
-                        pw.append("0" + ",");
-                        pw.append("0" + ",");
-                        pw.append(cusSavAcc.getAccNum() + ",");
-                        pw.append(Integer.toString(cusSavAcc.getAccBal()));
-                    } else {
-                        pw.append("0" + ",");
-                        pw.append("0" + ",");
-                        pw.append("0" + ",");
-                        pw.append("0");
-                    }
+            
+        });
+        
+     // Back button action
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.dispose(); // Close the current frame
+                try {
+                    new AccountGUI(customer); // Open the AccountGUI
+                } catch (IOException | ParseException ex) {
+                    ex.printStackTrace();
                 }
-            } catch (IOException e2) {
-                System.out.println("Error writing to file ");
-                e2.printStackTrace();
             }
         });
     }
@@ -180,5 +187,108 @@ public class OpenBankAccountGUI {
     private int generateAccountNumber() {
         Random random = new Random();
         return random.nextInt(999999 - 100000 + 1) + 100000;
+    }
+    
+    private void writeNewCustomer(Customer customer) {
+    	try (FileWriter pw = new FileWriter("data/CustomerList.csv", true)) {
+        	
+        	SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        	String formattedDate = dateFormat.format(customer.getDOB());
+        	pw.append("\n");
+            pw.append(customer.getFirstName() + ",");
+            pw.append(customer.getLastName() + ",");
+            pw.append(customer.getEmail() + ",");
+            pw.append(formattedDate + ",");
+            pw.append(customer.getCustomerID() + ",");
+            pw.append(customer.getPassword() + ",");
+
+            if (customer.getCheckingAccount()!=null&& customer.getSavingAccount()!=null) {
+                Account cusCheckAcc = customer.getCheckingAccount();
+                Account cusSavAcc = customer.getSavingAccount();
+                pw.append(cusCheckAcc.getAccNum() + ",");
+                pw.append(cusCheckAcc.getAccBal() + ",");
+                pw.append(cusSavAcc.getAccNum() + ",");
+                pw.append(Integer.toString(cusSavAcc.getAccBal()));
+            } else {
+                if (customer.getCheckingAccount()!=null) {
+                    Account cusCheckAcc = customer.getCheckingAccount();
+                    pw.append(cusCheckAcc.getAccNum() + ","); 
+                    pw.append(cusCheckAcc.getAccBal() + ",");
+                    pw.append("0" + ",");
+                    pw.append("0");
+                } else if (customer.getSavingAccount()!=null) {
+                    Account cusSavAcc = customer.getSavingAccount();
+                    pw.append("0" + ",");
+                    pw.append("0" + ",");
+                    pw.append(cusSavAcc.getAccNum() + ",");
+                    pw.append(Integer.toString(cusSavAcc.getAccBal()));
+                } else {
+                    pw.append("0" + ",");
+                    pw.append("0" + ",");
+                    pw.append("0" + ",");
+                    pw.append("0");
+                }
+            }
+        } catch (IOException e2) {
+            System.out.println("Error writing to file ");
+            e2.printStackTrace();
+        }
+    }
+    
+    private void writeCurrentCustomer(Customer existingCustomer, String acc) {
+    	try (BufferedReader reader = new BufferedReader(new FileReader("data/CustomerList.csv"))) {
+            String line;
+            StringBuilder updatedFileContent = new StringBuilder(); // Declare StringBuilder to store updated file content
+            
+            // Read and append the header line
+            String header = reader.readLine();
+            updatedFileContent.append(header).append("\n");
+            
+            // Process the remaining lines
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length >= 10) { // Ensure the line has enough elements
+                    String stored_customerID = parts[4].trim();
+                    if (stored_customerID.equals(existingCustomer.getCustomerID())) {
+                    	
+                    	switch (acc.toLowerCase()) {
+                		case "checking":
+                			parts[6] = Integer.toString(existingCustomer.getCheckingAccount().getAccNum());
+	                        parts[7] = Integer.toString(existingCustomer.getCheckingAccount().getAccBal());
+	                        break;
+                		case "saving":
+                			parts[8] = Integer.toString(existingCustomer.getCheckingAccount().getAccNum());
+                			parts[9] = Integer.toString(existingCustomer.getSavingAccount().getAccBal());
+                			break;
+                    	}
+                }
+                }
+                // Reconstruct the line with modified parts
+                updatedFileContent.append(String.join(",", parts));
+                
+                // Append newline character if it's not the last line
+                if (reader.ready()) {
+                    updatedFileContent.append("\n");
+                }
+            }
+
+            // Write the updated content back to the file
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter("data/CustomerList.csv"))) {
+                writer.write(updatedFileContent.toString());
+            }
+        } catch (IOException e) {
+            System.out.println("Customer not found in database.");
+            e.printStackTrace();
+        }
+    }
+    
+    private ArrayList<Customer> findCustomerList() throws ParseException{
+    	CustomerFactory cF = new CustomerFactory("data/CustomerList.csv");
+		ArrayList<Customer> cusList = new ArrayList<Customer>();
+		
+		while (cF.hasMoreData()) {
+			cusList.add(cF.getNextCustomer());
+		}
+		return cusList;
     }
 }

@@ -7,6 +7,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.text.ParseException;
 
 
 public class MenuFrame extends JFrame implements ActionListener {
@@ -69,7 +71,7 @@ public class MenuFrame extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == accountsItem) {
-            displayAccountsPage();
+            openAccountGUI(); // Open Account GUI when Accounts menu item is clicked
         } else if (e.getActionCommand().equals("Credit Card")) {
             System.out.println("Opening Credit Card Page...");
             new CreditCardPageGUI(loggedInCustomer);
@@ -78,7 +80,6 @@ public class MenuFrame extends JFrame implements ActionListener {
             System.exit(0);
         }
     }
-    
     private void displayHomePage() {
     	 homePage = new JPanel();
          //homePage.setLayout(new FlowLayout(FlowLayout.CENTER,100,100));
@@ -100,48 +101,22 @@ public class MenuFrame extends JFrame implements ActionListener {
          
          
          getContentPane().add(instructions,BorderLayout.PAGE_END);
-
         
 
     	
     }
-
-    private void displayAccountsPage() {
-    	accountInfoPanel = new JPanel();
-        accountInfoPanel.setLayout(new BoxLayout(accountInfoPanel, BoxLayout.Y_AXIS));
-        addAccountInfo();
-        add(accountInfoPanel);
-
-        accountInfoPanel.removeAll();
-        addAccountInfo();
-        homeMenuItem.setForeground(Color.BLUE);
-        homeMenuItem.setFont(homeMenuItem.getFont().deriveFont(Font.BOLD));
-        accountInfoPanel.revalidate();
-        accountInfoPanel.repaint();
-    }
-
-    public void addAccountInfo() {
-        for (Account acc : loggedInCustomer.getAccountList()) {
-            JPanel accountPanel = new JPanel();
-            accountPanel.setLayout(new BorderLayout());
-
-            JButton accountTypeButton = new JButton(acc.getAccType());
-            accountTypeButton.setEnabled(false);
-            accountPanel.add(accountTypeButton, BorderLayout.WEST);
-
-            JPanel detailsPanel = new JPanel(new GridLayout(2, 1));
-            detailsPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
-
-            JLabel accountNumberLabel = new JLabel("Account Number: " + acc.getAccNum());
-            detailsPanel.add(accountNumberLabel);
-
-            JLabel balanceLabel = new JLabel("Balance: " + acc.getAccBal());
-            detailsPanel.add(balanceLabel);
-
-            accountPanel.add(detailsPanel, BorderLayout.CENTER);
-
-            accountInfoPanel.add(accountPanel);
-        }
+    
+    private void openAccountGUI() {
+        // Open Account GUI
+        try {
+			new AccountGUI(loggedInCustomer);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
     public static void main(String[] args) {

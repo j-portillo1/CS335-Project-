@@ -8,8 +8,8 @@ import javax.swing.BoxLayout;
 
 
 public class CreditCardPageGUI{
-	
-	private GetCreditCardInfo creditHandler; // Declare the creditHandler
+    
+    private GetCreditCardInfo creditHandler; // Declare the creditHandler
 
     CreditCardPageGUI(Customer loginCustomer) {
         this.creditHandler = new GetCreditCardInfo(); // Initialize the creditHandler
@@ -47,35 +47,40 @@ public class CreditCardPageGUI{
         JLabel cardStatusLabel = new JLabel("Status: " + customerCard.getStatus());
         panel.add(cardStatusLabel);
         
-        
         // Pay Balance
         JButton balanceButton = new JButton("Paying balance");
         balanceButton.addActionListener(e -> {
-        	
-        	customerCard.payBalance(loginCustomer);
-        	creditHandler.updateCreditCardInfo(loginCustomer, "paying");
-        	// Update balance label with new balance
+            customerCard.payBalance(loginCustomer);
+            creditHandler.updateCreditCardInfo(loginCustomer, "paying");
+            // Update balance label with new balance
             cardBalLabel.setText("Balance: " + customerCard.getBalance());
-        
         });
         panel.add(balanceButton);
         
         // Deactivate card
         JButton deactivateButton = new JButton("Deactivate your card");
         deactivateButton.addActionListener(e -> {
-        	
-        	customerCard.changeStatus("Inactive");
-        	creditHandler.updateCreditCardInfo(loginCustomer, "deactivate");
-         // Update status label with new status
+            customerCard.changeStatus("Inactive");
+            creditHandler.updateCreditCardInfo(loginCustomer, "deactivate");
+            // Update status label with new status
             cardStatusLabel.setText("Status: " + customerCard.getStatus());
-        	}
-        );
+        });
         panel.add(deactivateButton);
        
         // Create a button to open a new credit card
         JButton openNewCardButton = new JButton("Open New Credit Card");
         openNewCardButton.addActionListener(e -> new CreditCardRegistration());
         panel.add(openNewCardButton);
+        
+        // Back button
+        JButton backButton = new JButton("Back");
+        backButton.addActionListener(e -> {
+            // Close the current frame
+            frame.dispose();
+            // Open the previous menu frame (assuming there's another frame)
+            // Add your code here to open the previous menu frame
+        });
+        panel.add(backButton);
 
         frame.setVisible(true);
     }

@@ -2,6 +2,8 @@ package bankClasses;
 
 import java.awt.Font;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
+import java.text.ParseException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -12,7 +14,7 @@ import javax.swing.JTextField;
 public class InsertMoneyGUI {
     private Customer loginCustomer; // Customer object passed to the constructor
 
-    public InsertMoneyGUI(Customer loginCustomer) {
+     InsertMoneyGUI(Customer loginCustomer) {
         this.loginCustomer = loginCustomer;
 
         JFrame frame = new JFrame("Insert Money Frame");
@@ -39,6 +41,11 @@ public class InsertMoneyGUI {
         JButton insertButton = new JButton("Deposit");
         insertButton.setBounds(10, 100, 120, 25);
         panel.add(insertButton);
+        
+        // Add a back button to go back to the Account GUI
+        JButton backButton = new JButton("Back to Account");
+        backButton.setBounds(140, 100, 150, 25);
+        panel.add(backButton);
 
         JLabel messageLabel = new JLabel();
         messageLabel.setBounds(250, 130, 250, 35);
@@ -70,6 +77,20 @@ public class InsertMoneyGUI {
                     messageLabel.setText("No account found. Please check your account type.");
                 }
             }
+        });
+        
+        // Add action listener for the back button
+        backButton.addActionListener((ActionEvent e) -> {
+            frame.dispose(); // Close the current frame
+            try {
+				new AccountGUI(loginCustomer);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (ParseException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} // Open the Account GUI
         });
     }
 }

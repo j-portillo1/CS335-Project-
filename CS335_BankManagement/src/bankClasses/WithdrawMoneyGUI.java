@@ -2,6 +2,8 @@ package bankClasses;
 
 import java.awt.Font;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
+import java.text.ParseException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -40,6 +42,11 @@ public class WithdrawMoneyGUI {
         withdrawButton.setBounds(10, 100, 120, 25);
         panel.add(withdrawButton);
 
+        // Add a back button to go back to the Account GUI
+        JButton backButton = new JButton("Back to Account");
+        backButton.setBounds(140, 100, 150, 25);
+        panel.add(backButton);
+
         JLabel messageLabel = new JLabel();
         messageLabel.setBounds(250, 130, 250, 35);
         messageLabel.setFont(new Font(null, Font.ITALIC, 20));
@@ -70,6 +77,20 @@ public class WithdrawMoneyGUI {
                     messageLabel.setText("No account found. Please check your account type.");
                 }
             }
+        });
+        
+        // Add action listener for the back button
+        backButton.addActionListener((ActionEvent e) -> {
+            frame.dispose(); // Close the current frame
+            try {
+				new AccountGUI(loginCustomer);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (ParseException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} // Open the Account GUI
         });
     }
 }

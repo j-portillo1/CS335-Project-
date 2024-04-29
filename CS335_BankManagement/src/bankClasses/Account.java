@@ -118,7 +118,7 @@ class Account{
 	            while ((line = reader.readLine()) != null) {
 	                String[] parts = line.split(",");
 	                if (parts.length >= 10) { // Ensure the line has enough elements
-	                    String stored_customerID = parts[0].trim();
+	                    String stored_customerID = parts[4].trim();
 	                    if (stored_customerID.equals(cus.getCustomerID())) {
 	                    	
 	                    	switch (acc.toLowerCase()) {
@@ -152,7 +152,5 @@ class Account{
 	        System.out.println("Invalid insertion amount.");
 	    }
 	}
-
-
 	
 }

@@ -106,7 +106,7 @@ public class CustomerRegistrationGUI {
             Customer newCustomer = new Customer(firstName, lastName, email, birthday, username, password);
         	try {
 				new OpenBankAccountGUI(newCustomer);
-			} catch (IOException e1) {
+			} catch (IOException | ParseException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
