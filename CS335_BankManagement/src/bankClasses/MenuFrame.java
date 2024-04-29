@@ -14,7 +14,7 @@ import java.awt.event.ActionListener;
 public class MenuFrame extends JFrame implements ActionListener {
 
     JMenuBar menuBar;
-    JMenu accountsMenu;
+    JMenuItem accountsMenu;
     JMenuItem homeMenuItem;
     JMenuItem logOutItem;
 
@@ -28,22 +28,27 @@ public class MenuFrame extends JFrame implements ActionListener {
         this.loggedInCustomer = loginCus;
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(400, 400);
+        this.setSize(450, 400);
         this.setLayout(new FlowLayout());
-
-        homeMenuItem = new JMenuItem("Home");
-        homeMenuItem.addActionListener(this);
-
         menuBar = new JMenuBar();
-        accountsMenu = new JMenu("Accounts");
+
+        
+        ImageIcon homeIcon = new ImageIcon ("data/homeIcon.png");
+        Image image1 = homeIcon.getImage().getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
+        homeMenuItem = new JMenuItem("Home", new ImageIcon(image1));
+        homeMenuItem.addActionListener(this);
+        
+        ImageIcon accountsIcon = new ImageIcon ("data/Accounts.png");
+        Image image2 = accountsIcon.getImage().getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
+        accountsMenu = new JMenuItem("Accounts",new ImageIcon(image2));
 
         creditCardIcon = new ImageIcon("data/creditcard.png");
-        Image image = creditCardIcon.getImage().getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
-        JMenuItem creditCardMenuItem = new JMenuItem("Credit Card", new ImageIcon(image));
+        Image image3 = creditCardIcon.getImage().getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
+        JMenuItem creditCardMenuItem = new JMenuItem("Credit Card", new ImageIcon(image3));
 
         logOutIcon = new ImageIcon("data/log-out-icon.png");
-        Image image3 = logOutIcon.getImage().getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
-        logOutItem = new JMenuItem("Log Out", new ImageIcon(image3));
+        Image image4 = logOutIcon.getImage().getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
+        logOutItem = new JMenuItem("Log Out", new ImageIcon(image4));
 
         creditCardMenuItem.addActionListener(this);
         logOutItem.addActionListener(this);
