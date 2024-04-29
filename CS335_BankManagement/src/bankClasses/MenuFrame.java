@@ -27,7 +27,7 @@ public class MenuFrame extends JFrame implements ActionListener {
         this.loggedInCustomer = loginCus;
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(400, 400);
+        this.setSize(600, 400);
         this.setLayout(new FlowLayout());
         menuBar = new JMenuBar();
 
