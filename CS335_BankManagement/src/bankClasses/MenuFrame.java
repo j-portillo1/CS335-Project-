@@ -27,7 +27,7 @@ public class MenuFrame extends JFrame implements ActionListener {
         this.loggedInCustomer = loginCus;
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(450, 400);
+        this.setSize(650, 400);
         this.setLayout(new FlowLayout());
         menuBar = new JMenuBar();
 
@@ -90,8 +90,17 @@ public class MenuFrame extends JFrame implements ActionListener {
         
          add(homePage);
          
-         //JLabel intro = new JLabel("Welcome");
-         //intro.setText("Welcome to our Bank!");
+         JTextArea instructions = new JTextArea();
+         instructions.setText("Instructions:\n"
+                 + "1. To view your Savings and or Checking Account(s) Please click on Accounts tab Above.\n"
+                 + "2. To Apply for a credit card, pay existing balance or deactivate card Please click on Credit Card tab Above .\n"
+                 + "3. To Log Out Please Click on Log Out tab above\n"
+                 + "Thank you for choosing MJA Bank! ");
+         instructions.setEditable(false);
+         
+         
+         getContentPane().add(instructions,BorderLayout.PAGE_END);
+
         
 
     	
