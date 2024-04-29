@@ -53,7 +53,7 @@ class Account{
 		return("Account Number: " + this.accNum + ", type: " + this.accType + ", balance: " + this.accBal + ", customer ID: "+ this.customerID);
 	}
 	
-	public void withdraw(Integer amount, Customer cus) { // Updated to accept double
+	public void withdraw(Integer amount, Customer cus, String acc) { // Updated to accept double
 	    if (amount > 0 && amount <= accBal) {
 	        accBal -= amount;
 	        System.out.println("Withdrawal of $" + amount + " successful. Current balance: $" + accBal);
@@ -70,7 +70,14 @@ class Account{
 	                if (parts.length >= 10) { // Ensure the line has enough elements
 	                    String stored_customerID = parts[4].trim();
 	                    if (stored_customerID.equals(cus.getCustomerID())) {
-	                        parts[7] = Integer.toString(accBal);
+	                    	switch (acc.toLowerCase()) {
+	                    		case "checking":
+	    	                        parts[7] = Integer.toString(accBal);
+	    	                        break;
+	                    		case "saving":
+	                    			parts[9] = Integer.toString(accBal);
+	                    			break;
+	                    	}
 	                    }
 	                }
 	                // Reconstruct the line with modified parts
@@ -95,7 +102,7 @@ class Account{
 	}
 
 
-	public void insert(Integer amount, Customer cus) { // Added insert method, accepts double
+	public void insert(Integer amount, Customer cus, String acc) { // Added insert method, accepts double
 	    if (amount > 0) {
 	        accBal += amount;
 	        System.out.println("Insertion of $" + amount + " successful. Current balance: $" + accBal);
@@ -113,8 +120,16 @@ class Account{
 	                if (parts.length >= 10) { // Ensure the line has enough elements
 	                    String stored_customerID = parts[0].trim();
 	                    if (stored_customerID.equals(cus.getCustomerID())) {
-	                        parts[6] = Integer.toString(accBal);
-	                    }
+	                    	
+	                    	switch (acc.toLowerCase()) {
+                    		case "checking":
+    	                        parts[7] = Integer.toString(accBal);
+    	                        break;
+                    		case "saving":
+                    			parts[9] = Integer.toString(accBal);
+                    			break;
+	                    	}
+	                }
 	                }
 	                // Reconstruct the line with modified parts
 	                updatedFileContent.append(String.join(",", parts));

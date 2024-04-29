@@ -64,7 +64,7 @@ public class WithdrawMoneyGUI {
 
                 if (account != null) {
                     Integer amount = Integer.parseInt(money);
-                    account.withdraw(amount, this.loginCustomer);
+                    account.withdraw(amount, this.loginCustomer, acc.toLowerCase());
                     messageLabel.setText("Money inserted successfully.");
                 } else {
                     messageLabel.setText("No account found. Please check your account type.");
