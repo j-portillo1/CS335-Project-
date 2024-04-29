@@ -1,7 +1,5 @@
 package bankClasses;
 
-import java.awt.FlowLayout;
-import java.awt.Image;
 import java.util.Date;
 
 import javax.swing.*;
@@ -14,13 +12,14 @@ import java.awt.event.ActionListener;
 public class MenuFrame extends JFrame implements ActionListener {
 
     JMenuBar menuBar;
-    JMenuItem accountsMenu;
+    JMenuItem accountsItem;
     JMenuItem homeMenuItem;
     JMenuItem logOutItem;
 
     ImageIcon creditCardIcon;
     ImageIcon logOutIcon;
 
+    JPanel homePage;
     Customer loggedInCustomer;
     JPanel accountInfoPanel;
 
@@ -40,7 +39,7 @@ public class MenuFrame extends JFrame implements ActionListener {
         
         ImageIcon accountsIcon = new ImageIcon ("data/Accounts.png");
         Image image2 = accountsIcon.getImage().getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
-        accountsMenu = new JMenuItem("Accounts",new ImageIcon(image2));
+        accountsItem = new JMenuItem("Accounts",new ImageIcon(image2));
 
         creditCardIcon = new ImageIcon("data/creditcard.png");
         Image image3 = creditCardIcon.getImage().getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
@@ -50,30 +49,27 @@ public class MenuFrame extends JFrame implements ActionListener {
         Image image4 = logOutIcon.getImage().getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
         logOutItem = new JMenuItem("Log Out", new ImageIcon(image4));
 
+        accountsItem.addActionListener(this);
         creditCardMenuItem.addActionListener(this);
         logOutItem.addActionListener(this);
 
         menuBar.add(homeMenuItem);
-        menuBar.add(accountsMenu);
+        menuBar.add(accountsItem);
         menuBar.add(creditCardMenuItem);
         menuBar.add(logOutItem);
 
         this.setJMenuBar(menuBar);
-
-        accountInfoPanel = new JPanel();
-        accountInfoPanel.setLayout(new BoxLayout(accountInfoPanel, BoxLayout.Y_AXIS));
-        addAccountInfo();
-        add(accountInfoPanel);
-
+        
         displayHomePage();
+        
 
         this.setVisible(true);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == homeMenuItem) {
-            displayHomePage();
+        if (e.getSource() == accountsItem) {
+            displayAccountsPage();
         } else if (e.getActionCommand().equals("Credit Card")) {
             System.out.println("Opening Credit Card Page...");
             new CreditCardPageGUI(loggedInCustomer);
@@ -82,8 +78,31 @@ public class MenuFrame extends JFrame implements ActionListener {
             System.exit(0);
         }
     }
-
+    
     private void displayHomePage() {
+    	 homePage = new JPanel();
+         //homePage.setLayout(new FlowLayout(FlowLayout.CENTER,100,100));
+         ImageIcon logo = new ImageIcon("data/Logo.jpeg");
+         Image imagelogo = logo.getImage().getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH);
+         JMenuItem logoItem = new JMenuItem("BANK",new ImageIcon(imagelogo));
+         
+         homePage.add(logoItem,BorderLayout.NORTH);
+        
+         add(homePage);
+         
+         //JLabel intro = new JLabel("Welcome");
+         //intro.setText("Welcome to our Bank!");
+        
+
+    	
+    }
+
+    private void displayAccountsPage() {
+    	accountInfoPanel = new JPanel();
+        accountInfoPanel.setLayout(new BoxLayout(accountInfoPanel, BoxLayout.Y_AXIS));
+        addAccountInfo();
+        add(accountInfoPanel);
+
         accountInfoPanel.removeAll();
         addAccountInfo();
         homeMenuItem.setForeground(Color.BLUE);
