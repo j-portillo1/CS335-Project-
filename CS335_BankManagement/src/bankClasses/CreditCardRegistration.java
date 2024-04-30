@@ -4,9 +4,13 @@ import javax.swing.*;
 import javax.swing.text.MaskFormatter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -101,6 +105,14 @@ public class CreditCardRegistration {
         JTextField zipCodeText = new JTextField(12);
         zipCodeText.setBounds(100, 290, 165, 25);
         panel.add(zipCodeText);
+        
+        zipCodeText.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                if(zipCodeText.getText().length()>=10&&!(evt.getKeyChar()==KeyEvent.VK_DELETE||evt.getKeyChar()==KeyEvent.VK_BACK_SPACE)) {
+                    evt.consume();
+                 }
+             }
+        });
 
         JLabel contactLabel = new JLabel("Contact Information ");
         contactLabel.setBounds(10, 320, 150, 25);
@@ -173,55 +185,63 @@ public class CreditCardRegistration {
         panel.add(messageLabel);
 
         frame.setVisible(true);
-        String firstName = firstText.getText();
-        String lastName = lastText.getText();
-        String email = emailText.getText();
-        String dob = dobText[0].getText();
-        String number = numberText[0].getText();
-        String home = homeaddressText.getText();
-        String phone = phoneText[0].getText();
-        String city = cityText.getText();
-        String state = stateText.getText();
-        String zipCode = zipCodeText.getText();
-        String residence = residenceText.getText();
-        String employment = employmentText.getText();
-        String income = incomeText.getText();
-        String credit = creditText.getText();
-
-        if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || dob.isEmpty() || number.isEmpty() || home.isEmpty() || phone.isEmpty() || credit.isEmpty()) {
-        	messageLabel.setText("Please fill in all fields");
-        } else if (!isValidEmail(email)) {
-            messageLabel.setText("Invalid email address");
-        } else if (!isValidSSN(number)) {
-            messageLabel.setText("Invalid SSN");
-        } else if (!isValidZipCode(zipCode)) {
-            messageLabel.setText("Invalid ZIP code");
-        } else {
-            messageLabel.setForeground(Color.blue);
-            messageLabel.setText("Registration successful!");
-            panel.repaint();
-            try (FileWriter writer = new FileWriter("data/CreditList.csv", true)) {
-                    writer.append(firstName + ",");
-                    writer.append(lastName + ",");
-                    writer.append(email + ",");
-                    writer.append(dob + ",");
-                    writer.append(phone + ",");
-                    writer.append(number + ",");
-                    writer.append(home + ",");
-                    writer.append(city + ",");
-                    writer.append(state + ",");
-                    writer.append(zipCode + ",");
-                    writer.append(residence + ",");
-                    writer.append(employment + ",");
-                    writer.append(income + ",");
-                    writer.append(credit);
-                    writer.append("\n");
-             } catch (IOException e1) {
-                    e1.printStackTrace();
-                    messageLabel.setText("Error occurred while writing to file");
-                }
-            }
-       };
+        
+        registrationButton.addActionListener(e -> {
+	        String firstName = firstText.getText();
+	        String lastName = lastText.getText();
+	        String email = emailText.getText();
+	        String dob = dobText[0].getText();
+	        String number = numberText[0].getText();
+	        String home = homeaddressText.getText();
+	        String phone = phoneText[0].getText();
+	        String city = cityText.getText();
+	        String state = stateText.getText();
+	        String zipCode = zipCodeText.getText();
+	        String residence = residenceText.getText();
+	        String employment = employmentText.getText();
+	        String income = incomeText.getText();
+	        String credit = creditText.getText();
+	
+	        if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || dob.isEmpty() || number.isEmpty() || home.isEmpty() || phone.isEmpty() || credit.isEmpty()) {
+	        	messageLabel.setText("Please fill in all fields");
+	        } else if (!isValidEmail(email)) {
+	            messageLabel.setText("Invalid email address");
+	        } else if (!isValidSSN(number)) {
+	            messageLabel.setText("Invalid SSN");
+	        } else if (!isValidZipCode(zipCode)) {
+	            messageLabel.setText("Invalid ZIP code");
+	        } else {
+	            messageLabel.setForeground(Color.blue);
+	            messageLabel.setText("Registration successful!");
+	            panel.repaint();
+	            try (FileWriter writer = new FileWriter("data/CreditList.csv", true)) {
+	                    writer.append(firstName + ",");
+	                    writer.append(lastName + ",");
+	                    writer.append(email + ",");
+	                    writer.append(dob + ",");
+	                    writer.append(phone + ",");
+	                    writer.append(number + ",");
+	                    writer.append(home + ",");
+	                    writer.append(city + ",");
+	                    writer.append(state + ",");
+	                    writer.append(zipCode + ",");
+	                    writer.append(residence + ",");
+	                    writer.append(employment + ",");
+	                    writer.append(income + ",");
+	                    writer.append(credit);
+	                    writer.append("\n");
+	             } catch (IOException e1) {
+	                    e1.printStackTrace();
+	                    messageLabel.setText("Error occurred while writing to file");
+	                }
+	            }
+	        try {
+				cardApproval();
+			} catch (FileNotFoundException e1) {
+				e1.printStackTrace();
+			}
+        });
+    }
 
     private static boolean isValidEmail(String email) {
         String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
@@ -245,5 +265,69 @@ public class CreditCardRegistration {
     }
     public static void main(String args[]) {
     	new CreditCardRegistration();
+    }
+    
+    private static void cardApproval () throws FileNotFoundException {
+    	File creditCSVFile = new File("data/CreditList.csv"); 
+		File customerCSVFile = new File("data/CustomerList.csv");
+		
+		Scanner customer = new Scanner(customerCSVFile);
+		Scanner credit = new Scanner(creditCSVFile);
+        String line = "";
+        String cusUsername ="";
+        while (credit.hasNextLine()) {
+        	line = credit.nextLine();
+        	System.out.println(line);
+        	String[] data = line.split(",");
+            double income = Double.parseDouble(data[12]);
+            String creditCardType = data[data.length - 1];
+                
+            while (customer.hasNextLine()) {
+            	String customerData = customer.nextLine();
+                String[] arrOfStr = customerData.split(",");
+                String firstName = arrOfStr[0];
+                if (firstName.equals(data[0])) {
+                   cusUsername = arrOfStr[4];
+                   System.out.println(cusUsername);
+                }
+            }
+            
+          //Create credit cards for users
+    		VisaCard visaBalance500 = new VisaCard("4242424242424242", 200, 500, 233, cusUsername);
+    		VisaCard visaBalance1000 = new VisaCard("4035501000000008", 680, 1000, 737, cusUsername);
+    		
+    		DiscoverCard discBalance500 = new DiscoverCard("6011000990139424", 75, 500, 264, cusUsername);
+    		DiscoverCard discBalance1000 = new DiscoverCard("6011111111111117", 450, 500, 882, cusUsername);
+    		
+    		MasterCard masBalance500 = new MasterCard("5105105105105100", 300, 500, 321, cusUsername);
+    		MasterCard masBalance1000 = new MasterCard("5555555555554444", 60, 500, 642, cusUsername);
+              
+            CreditCardApproval approvalProcess = new CreditCardApproval();
+            String approvalDecision = approvalProcess.decideCreditCardApproval(data[0],
+                		data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],
+                		data[9],data[10],data[11],income,creditCardType);
+                
+            if (!approvalDecision.equals("Denied")) {
+            	System.out.println(approvalDecision);
+				if (creditCardType.equals("Visa") && approvalDecision.equals("Approved with $500 balance")) {
+                	VisaCard customerCard = visaBalance500;}
+				else if (creditCardType.equals("Visa") && approvalDecision.equals("Approved with $1000 balance")) {
+                	VisaCard customerCard = visaBalance1000;}
+				else if (creditCardType.equals("Discover") && approvalDecision.equals("Approved with $500 balance")) {
+                	DiscoverCard customerCard = discBalance500;}
+				else if (creditCardType.equals("Discover") && approvalDecision.equals("Approved with $1000 balance")) {
+                	DiscoverCard customerCard = discBalance1000;}
+				else if (creditCardType.equals("Mastercard") && approvalDecision.equals("Approved with $500 balance")) {
+                	MasterCard customerCard = masBalance500;}
+                else {
+                	MasterCard customerCard = masBalance1000;}
+            }
+            
+            else {
+                System.out.println("You were denied a credit card");
+            } 
+            customer.close();
+            credit.close();
+	    }
     }
 }
