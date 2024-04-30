@@ -94,56 +94,55 @@ public class CustomerRegistrationGUI {
             String email = emailText.getText();
             String dob = dobText.getText();
             Date birthday = null;
-			try {
-				birthday = parseDate(dob);
-			} catch (ParseException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+            try {
+                birthday = parseDate(dob);
+            } catch (ParseException e1) {
+                e1.printStackTrace();
+            }
             String username = userNameText.getText();
             String password = new String(passwordText.getPassword());
-            frame.dispose();
             Customer newCustomer = new Customer(firstName, lastName, email, birthday, username, password);
-        	try {
-				new OpenBankAccountGUI(newCustomer);
-			} catch (IOException | ParseException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-        	
-
 
             if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || dob.isEmpty() || password.isEmpty()) {
                 // If any of the fields are empty, display an error message
                 messageLabel.setText("Please fill in all fields");
             } else {
-                messageLabel.setForeground(Color.blue);
-                messageLabel.setText("Registration successful!");
-                
                 try {
+                    boolean customerExists = false;
                     String firstColumn;
                     String secondColumn;
                     FileReader reader = new FileReader("data/CustomerList.csv");
                     BufferedReader buffReader = new BufferedReader(reader);
-                    		
-                    String fline;
-                    while((fline =buffReader.readLine() ) != null) {
-            			String[] columns = fline.split(",");
-            			if (columns.length >= 2) {
-                    		firstColumn = columns[0].trim();
-                    		secondColumn = columns[0].trim();
-            				if((firstName.equals(firstColumn)) & (lastName.equals(secondColumn))){
-                    			System.out.println("Customer Account already exist. Please login with your credentials");}
-            					}
 
-            				}
-            				buffReader.close();
-            			}catch(IOException er){
-            				er.printStackTrace();
-            			}
+                    String fline;
+                    while ((fline = buffReader.readLine()) != null) {
+                        String[] columns = fline.split(",");
+                        if (columns.length >= 2) {
+                            firstColumn = columns[0].trim();
+                            secondColumn = columns[1].trim();
+                            if (firstName.equals(firstColumn) && lastName.equals(secondColumn)) {
+                                customerExists = true;
+                                break; // No need to continue checking
+                            }
+                        }
+                    }
+                    buffReader.close();
+
+                    if (customerExists) {
+                        System.out.println("Customer Account already exists. Please login with your credentials");
+                    } else {
+                        writeNewCustomer(newCustomer);
+                        messageLabel.setForeground(Color.blue);
+                        messageLabel.setText("Registration successful!");
+                    }
+                } catch (IOException er) {
+                    er.printStackTrace();
+                }
             }
-            
+            frame.dispose();
+            new LoginGUI();
         });
+
         
 	}
 	
@@ -151,6 +150,30 @@ public class CustomerRegistrationGUI {
         SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
         return dateFormat.parse(dateString);
 	}
+	
+	private void writeNewCustomer(Customer customer) {
+    	try (FileWriter pw = new FileWriter("data/CustomerList.csv", true)) {
+        	
+        	SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        	String formattedDate = dateFormat.format(customer.getDOB());
+        	pw.append("\n");
+            pw.append(customer.getFirstName() + ",");
+            pw.append(customer.getLastName() + ",");
+            pw.append(customer.getEmail() + ",");
+            pw.append(formattedDate + ",");
+            pw.append(customer.getCustomerID() + ",");
+            pw.append(customer.getPassword() + ",");           
+            pw.append("0" + ",");
+            pw.append("0" + ",");
+            pw.append("0" + ",");
+            pw.append("0");
+            
+        } catch (IOException e2) {
+            System.out.println("Error writing to file ");
+            e2.printStackTrace();
+        }
+	}
+    
 
     public static void main(String[] args) {
     		

@@ -110,9 +110,6 @@ public class MenuFrame extends JFrame implements ActionListener {
         // Open Account GUI
         try {
 			new AccountGUI(loggedInCustomer);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

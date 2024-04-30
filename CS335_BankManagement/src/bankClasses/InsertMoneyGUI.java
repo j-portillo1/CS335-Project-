@@ -13,9 +13,10 @@ import javax.swing.JTextField;
 
 public class InsertMoneyGUI {
     private Customer loginCustomer; // Customer object passed to the constructor
-
-     InsertMoneyGUI(Customer loginCustomer) {
+    private AccountGUI accountGUI;
+     InsertMoneyGUI(Customer loginCustomer, AccountGUI accountGUI ) {
         this.loginCustomer = loginCustomer;
+        this.accountGUI = accountGUI;
 
         JFrame frame = new JFrame("Insert Money Frame");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -32,10 +33,10 @@ public class InsertMoneyGUI {
         panel.add(moneyText);
 
         JLabel accNameLabel = new JLabel("Choose account you want to deposit (Checking/Saving): ");
-        accNameLabel.setBounds(10, 50, 350, 25);
+        accNameLabel.setBounds(10, 50, 375, 25);
         panel.add(accNameLabel);
         JTextField accText = new JTextField(12);
-        accText.setBounds(360, 50, 175, 25);
+        accText.setBounds(375, 50, 175, 25);
         panel.add(accText);
 
         JButton insertButton = new JButton("Deposit");
@@ -76,6 +77,7 @@ public class InsertMoneyGUI {
                 } else {
                     messageLabel.setText("No account found. Please check your account type.");
                 }
+                accountGUI.updateAccountInfo();
             }
         });
         
@@ -84,9 +86,6 @@ public class InsertMoneyGUI {
             frame.dispose(); // Close the current frame
             try {
 				new AccountGUI(loginCustomer);
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
 			} catch (ParseException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();

@@ -23,8 +23,9 @@ public class AccountGUI {
     private JPanel accountInfoPanel;
     private JPanel panel;
 
-    AccountGUI(Customer loginCus) throws IOException, ParseException{
+    AccountGUI(Customer loginCus) throws ParseException {
         this.loggedInCustomer = loginCus;
+        accountInfoPanel = new JPanel();
 
         JFrame frame = new JFrame("Account");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -32,66 +33,81 @@ public class AccountGUI {
         panel = new JPanel();
         frame.add(panel);
         panel.setLayout(new BorderLayout());
-
-        displayAccountsPage(); // Display the account information
         
-     // Create a button to go back to the menu
-        JButton backButton = new JButton("Back to Menu");
-        backButton.addActionListener(e -> {
-            frame.dispose(); // Close the current frame
-            new MenuFrame(loggedInCustomer); // Open the MenuFrame
-        });
+        // Display the account information regardless of whether the customer has accounts or not
+        displayAccountsPage();
 
-        // Create buttons for deposit and withdraw actions
-        JButton depositButton = new JButton("Deposit");
-        JButton withdrawButton = new JButton("Withdraw");
+        // Check if the customer has any accounts
+        if (loggedInCustomer.getAccountList().isEmpty()) {
+            // If no accounts, display a message and option to open an account
+            JLabel messageLabel = new JLabel("You don't have any accounts.");
+            messageLabel.setFont(new Font("Arial", Font.BOLD, 16));
+            messageLabel.setHorizontalAlignment(JLabel.CENTER);
+            panel.add(messageLabel, BorderLayout.CENTER);
 
-        // Add action listeners to the buttons
-        depositButton.addActionListener(e -> new InsertMoneyGUI(loggedInCustomer));
-        withdrawButton.addActionListener(e -> new WithdrawMoneyGUI(loggedInCustomer));
+            JButton openAccountButton = new JButton("Open Bank Account");
+            openAccountButton.addActionListener(e -> {
+                try {
+                    new OpenBankAccountGUI(loggedInCustomer, this);
+                    frame.dispose(); // Close the current frame
+                } catch (ParseException ex) {
+                    ex.printStackTrace();
+                }
+            });
+            panel.add(openAccountButton, BorderLayout.SOUTH);
+        } else {
+            // Create a button to go back to the menu
+            JButton backButton = new JButton("Back to Menu");
+            backButton.addActionListener(e -> {
+                frame.dispose(); // Close the current frame
+                new MenuFrame(loggedInCustomer); // Open the MenuFrame
+            });
 
-        // Create a panel for the buttons and set layout
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        
-        // Add buttons to the button panel
-        buttonPanel.add(depositButton);
-        buttonPanel.add(withdrawButton);
-        
-     // Create an "Internal Transfer" button
-        JButton internalTransferButton = new JButton("Transfer");
-        internalTransferButton.addActionListener(e -> {
-                new TransferGUI(loggedInCustomer);    
-        });
+            // Create buttons for deposit and withdraw actions
+            JButton depositButton = new JButton("Deposit");
+            JButton withdrawButton = new JButton("Withdraw");
 
-        // Create an "Open Bank Account" button
-        JButton openAccountButton = new JButton("Open Bank Account");
-        openAccountButton.addActionListener( e-> {
-            
-            try {
-				new OpenBankAccountGUI(loggedInCustomer);
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (ParseException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-          
-        });
-        
-        buttonPanel.add(internalTransferButton);
-        buttonPanel.add(openAccountButton);
-        buttonPanel.add(backButton); // Add the back button
+            // Add action listeners to the buttons
+            depositButton.addActionListener(e -> new InsertMoneyGUI(loggedInCustomer, this));
+            withdrawButton.addActionListener(e -> new WithdrawMoneyGUI(loggedInCustomer, this));
+
+            // Create a panel for the buttons and set layout
+            JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+
+            // Add buttons to the button panel
+            buttonPanel.add(depositButton);
+            buttonPanel.add(withdrawButton);
+
+            // Create an "Internal Transfer" button
+            JButton internalTransferButton = new JButton("Transfer");
+            internalTransferButton.addActionListener(e -> {
+                new TransferGUI(loggedInCustomer, this);
+            });
+
+            // Create an "Open Bank Account" button
+            JButton openAccountButton = new JButton("Open Bank Account");
+            openAccountButton.addActionListener(e -> {
+                try {
+                    new OpenBankAccountGUI(loggedInCustomer, this);
+                } catch (ParseException ex) {
+                    ex.printStackTrace();
+                }
+            });
+
+            // Add the buttons to the button panel
+            buttonPanel.add(internalTransferButton);
+            buttonPanel.add(openAccountButton);
+            buttonPanel.add(backButton); // Add the back button
 
 
-        // Add the button panel to the south of the main panel
-        panel.add(buttonPanel, BorderLayout.SOUTH);
+            // Add the button panel to the south of the main panel
+            panel.add(buttonPanel, BorderLayout.SOUTH);
+        }
 
         frame.setVisible(true);
     }
 
     private void displayAccountsPage() {
-        accountInfoPanel = new JPanel();
         accountInfoPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10)); // Use FlowLayout with spacing
 
         addAccountInfo(); // Add account information to the panel
@@ -124,4 +140,16 @@ public class AccountGUI {
             accountInfoPanel.add(accountPanel);
         }
     }
+    
+    private void clearAccountInfoPanel() {
+        accountInfoPanel.removeAll();
+        accountInfoPanel.revalidate();
+        accountInfoPanel.repaint();
+    }
+    
+    public void updateAccountInfo() {
+        clearAccountInfoPanel();
+        addAccountInfo();
+    }
+    
 }

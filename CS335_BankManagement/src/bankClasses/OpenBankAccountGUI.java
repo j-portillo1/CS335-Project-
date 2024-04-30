@@ -24,9 +24,11 @@ public class OpenBankAccountGUI {
     
     private Customer customer;
     private ArrayList<Customer> customerList;
+    private AccountGUI accountGUI;
 
-    OpenBankAccountGUI(Customer newCustomer) throws IOException, ParseException {
+    OpenBankAccountGUI(Customer newCustomer, AccountGUI accountGUI ) throws ParseException {
         this.customer = newCustomer;
+        this.accountGUI = accountGUI;
         this.customerList = findCustomerList();
         
         // Creating the Frame
@@ -125,17 +127,6 @@ public class OpenBankAccountGUI {
                     || (saving.equals("Yes") && savingBalStr.isEmpty())) {
                 messageLabel.setText("Please fill in all fields");
             } else {
-            	
-            	// Check if the customer exists
-                boolean customerExists = false;
-                Customer existingCustomer = null;
-                for (Customer c : customerList) {
-                    if (c.getCustomerID().equals(customer.getCustomerID())) {
-                        customerExists = true;
-                        existingCustomer = c;
-                        break;
-                    }
-                }
                 
                 // Successfully created account
                 if (checking.equals("Yes") && customer.getCheckingAccount()==null) {
@@ -144,10 +135,8 @@ public class OpenBankAccountGUI {
                     Account checkingAccount = new Account(accCheckingNum, "Checking", checkingDeposit,
                             customer.getCustomerID());
                     customer.addAccount(checkingAccount);
-                    if (customerExists) {
-                        existingCustomer.addAccount(checkingAccount);
-                        writeCurrentCustomer(existingCustomer,"checking");
-                    }
+                    writeCurrentCustomer(customer,"checking");
+                   
                 }
                 if (saving.equals("Yes")&& customer.getSavingAccount()==null) {
                     int accSavingNum = generateAccountNumber();
@@ -155,16 +144,11 @@ public class OpenBankAccountGUI {
                     Account savingAccount = new Account(accSavingNum, "Saving", savingDeposit,
                             customer.getCustomerID());
                     customer.addAccount(savingAccount);
-                    if (customerExists) {
-                        existingCustomer.addAccount(savingAccount);
-                        writeCurrentCustomer(existingCustomer,"saving");
-                    }
+                    writeCurrentCustomer(customer,"saving");
+                  
                 }
-                if (!customerExists) {
-                	writeNewCustomer(customer);}
-                
-                
                 messageLabel.setText("Successfully created account(s)");
+                accountGUI.updateAccountInfo();
             }
             
             
@@ -177,7 +161,7 @@ public class OpenBankAccountGUI {
                 frame.dispose(); // Close the current frame
                 try {
                     new AccountGUI(customer); // Open the AccountGUI
-                } catch (IOException | ParseException ex) {
+                } catch (ParseException ex) {
                     ex.printStackTrace();
                 }
             }
@@ -187,52 +171,6 @@ public class OpenBankAccountGUI {
     private int generateAccountNumber() {
         Random random = new Random();
         return random.nextInt(999999 - 100000 + 1) + 100000;
-    }
-    
-    private void writeNewCustomer(Customer customer) {
-    	try (FileWriter pw = new FileWriter("data/CustomerList.csv", true)) {
-        	
-        	SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-        	String formattedDate = dateFormat.format(customer.getDOB());
-        	pw.append("\n");
-            pw.append(customer.getFirstName() + ",");
-            pw.append(customer.getLastName() + ",");
-            pw.append(customer.getEmail() + ",");
-            pw.append(formattedDate + ",");
-            pw.append(customer.getCustomerID() + ",");
-            pw.append(customer.getPassword() + ",");
-
-            if (customer.getCheckingAccount()!=null&& customer.getSavingAccount()!=null) {
-                Account cusCheckAcc = customer.getCheckingAccount();
-                Account cusSavAcc = customer.getSavingAccount();
-                pw.append(cusCheckAcc.getAccNum() + ",");
-                pw.append(cusCheckAcc.getAccBal() + ",");
-                pw.append(cusSavAcc.getAccNum() + ",");
-                pw.append(Integer.toString(cusSavAcc.getAccBal()));
-            } else {
-                if (customer.getCheckingAccount()!=null) {
-                    Account cusCheckAcc = customer.getCheckingAccount();
-                    pw.append(cusCheckAcc.getAccNum() + ","); 
-                    pw.append(cusCheckAcc.getAccBal() + ",");
-                    pw.append("0" + ",");
-                    pw.append("0");
-                } else if (customer.getSavingAccount()!=null) {
-                    Account cusSavAcc = customer.getSavingAccount();
-                    pw.append("0" + ",");
-                    pw.append("0" + ",");
-                    pw.append(cusSavAcc.getAccNum() + ",");
-                    pw.append(Integer.toString(cusSavAcc.getAccBal()));
-                } else {
-                    pw.append("0" + ",");
-                    pw.append("0" + ",");
-                    pw.append("0" + ",");
-                    pw.append("0");
-                }
-            }
-        } catch (IOException e2) {
-            System.out.println("Error writing to file ");
-            e2.printStackTrace();
-        }
     }
     
     private void writeCurrentCustomer(Customer existingCustomer, String acc) {
