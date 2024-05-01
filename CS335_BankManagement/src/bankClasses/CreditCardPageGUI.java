@@ -77,7 +77,10 @@ public class CreditCardPageGUI {
            
             // Create a button to open a new credit card
             JButton openNewCardButton = new JButton("Open New Credit Card");
-            openNewCardButton.addActionListener(e -> new CreditCardRegistration());
+            openNewCardButton.addActionListener(e -> {
+            	new CreditCardRegistration(loginCustomer);
+            	frame.dispose();
+            	});
             panel.add(openNewCardButton);
             
             // Back button
@@ -126,7 +129,10 @@ public class CreditCardPageGUI {
 
             // Open credit card button
             JButton openNewCardButton = new JButton("Open Credit Card");
-            openNewCardButton.addActionListener(e -> new CreditCardRegistration());
+            openNewCardButton.addActionListener(e -> {
+            	new CreditCardRegistration(loginCustomer);
+            	frame.dispose();
+            });
             buttonPanel.add(openNewCardButton);
             
             // Back button

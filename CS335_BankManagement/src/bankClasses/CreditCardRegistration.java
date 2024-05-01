@@ -3,20 +3,18 @@ package bankClasses;
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.Scanner;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CreditCardRegistration {
-    CreditCardRegistration() {
-    	
+    private Customer cus;
+	CreditCardRegistration(Customer loginCustomer) {
+    	this.cus = loginCustomer;
     	JFrame frame = new JFrame("Credit Card Registration Frame");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(500, 800);
@@ -178,13 +176,16 @@ public class CreditCardRegistration {
         JButton registrationButton = new JButton("Register");
         registrationButton.setBounds(10, 610, 120, 25);
         panel.add(registrationButton);
+        
+        JButton backButton = new JButton("Back");
+        backButton.setBounds(140, 610, 120, 25);
+        panel.add(backButton);
+
 
         JLabel messageLabel = new JLabel();
-        messageLabel.setBounds(100, 640, 250, 35);
-        messageLabel.setFont(new Font(null, Font.ITALIC, 20));
+        messageLabel.setBounds(10, 640, 500, 35);
+        messageLabel.setFont(new Font(null, Font.ITALIC, 10));
         panel.add(messageLabel);
-
-        frame.setVisible(true);
         
         registrationButton.addActionListener(e -> {
 	        String firstName = firstText.getText();
@@ -214,33 +215,34 @@ public class CreditCardRegistration {
 	            messageLabel.setForeground(Color.blue);
 	            messageLabel.setText("Registration successful!");
 	            panel.repaint();
-	            try (FileWriter writer = new FileWriter("data/CreditList.csv", true)) {
-	                    writer.append(firstName + ",");
-	                    writer.append(lastName + ",");
-	                    writer.append(email + ",");
-	                    writer.append(dob + ",");
-	                    writer.append(phone + ",");
-	                    writer.append(number + ",");
-	                    writer.append(home + ",");
-	                    writer.append(city + ",");
-	                    writer.append(state + ",");
-	                    writer.append(zipCode + ",");
-	                    writer.append(residence + ",");
-	                    writer.append(employment + ",");
-	                    writer.append(income + ",");
-	                    writer.append(credit);
-	                    writer.append("\n");
-	             } catch (IOException e1) {
-	                    e1.printStackTrace();
-	                    messageLabel.setText("Error occurred while writing to file");
-	                }
-	            }
-	        try {
-				cardApproval();
-			} catch (FileNotFoundException e1) {
-				e1.printStackTrace();
-			}
+	            try {
+					this.cus  = CreditCardApproval.findCustomer(firstName, lastName, email, dob);
+					if (cus==null) {
+			            messageLabel.setText("Can not find your information.Please register again");
+			            new CreditCardRegistration(loginCustomer);
+					}else {
+						CreditCard customerCard = CreditCardApproval.decideCreditCardApproval(firstName, lastName, email, dob, number, phone, income, city, state, zipCode, residence, employment, Integer.parseInt(income), credit);
+						if(customerCard==null) {
+				            messageLabel.setText("Sorry your application has been denied");
+						}else {
+				            messageLabel.setText("Congratulations! Your application has been approved. Please check your credit card!");
+				            writeToFile(cus, customerCard, credit);
+						}
+					}
+				} catch (ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+	         }
+	            
+	           
+	        });
+        backButton.addActionListener(e -> {
+            frame.dispose(); // Close the current frame
+            new CreditCardPageGUI(this.cus);
         });
+        frame.setVisible(true);
+
     }
 
     private static boolean isValidEmail(String email) {
@@ -263,71 +265,26 @@ public class CreditCardRegistration {
         Matcher matcher = pattern.matcher(zipCode);
         return matcher.matches();
     }
-    public static void main(String args[]) {
-    	new CreditCardRegistration();
+    private void writeToFile(Customer customer, CreditCard card, String cardType) {
+    	try (FileWriter pw = new FileWriter("data/CustomerCreditCardList.csv", true)) {
+        	pw.append("\n");
+            pw.append(customer.getCustomerID() + ",");
+            pw.append(cardType + ",");
+            pw.append(card.getCardNumber() + ",");
+            pw.append(card.getCreditLimit() + ",");
+            pw.append(card.getBalance() + ",");           
+            pw.append(card.getCVV() + ",");
+            pw.append("Active");
+        } catch (IOException e2) {
+            System.out.println("Error writing to file ");
+            e2.printStackTrace();
+        }
     }
-    
-    private static void cardApproval () throws FileNotFoundException {
-    	File creditCSVFile = new File("data/CreditList.csv"); 
-		File customerCSVFile = new File("data/CustomerList.csv");
-		
-		Scanner customer = new Scanner(customerCSVFile);
-		Scanner credit = new Scanner(creditCSVFile);
-        String line = "";
-        String cusUsername ="";
-        while (credit.hasNextLine()) {
-        	line = credit.nextLine();
-        	System.out.println(line);
-        	String[] data = line.split(",");
-            double income = Double.parseDouble(data[12]);
-            String creditCardType = data[data.length - 1];
-                
-            while (customer.hasNextLine()) {
-            	String customerData = customer.nextLine();
-                String[] arrOfStr = customerData.split(",");
-                String firstName = arrOfStr[0];
-                if (firstName.equals(data[0])) {
-                   cusUsername = arrOfStr[4];
-                   System.out.println(cusUsername);
-                }
-            }
-            
-          //Create credit cards for users
-    		VisaCard visaBalance500 = new VisaCard("4242424242424242", 200, 500, 233, cusUsername);
-    		VisaCard visaBalance1000 = new VisaCard("4035501000000008", 680, 1000, 737, cusUsername);
-    		
-    		DiscoverCard discBalance500 = new DiscoverCard("6011000990139424", 75, 500, 264, cusUsername);
-    		DiscoverCard discBalance1000 = new DiscoverCard("6011111111111117", 450, 500, 882, cusUsername);
-    		
-    		MasterCard masBalance500 = new MasterCard("5105105105105100", 300, 500, 321, cusUsername);
-    		MasterCard masBalance1000 = new MasterCard("5555555555554444", 60, 500, 642, cusUsername);
-              
-            CreditCardApproval approvalProcess = new CreditCardApproval();
-            String approvalDecision = approvalProcess.decideCreditCardApproval(data[0],
-                		data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],
-                		data[9],data[10],data[11],income,creditCardType);
-                
-            if (!approvalDecision.equals("Denied")) {
-            	System.out.println(approvalDecision);
-				if (creditCardType.equals("Visa") && approvalDecision.equals("Approved with $500 balance")) {
-                	VisaCard customerCard = visaBalance500;}
-				else if (creditCardType.equals("Visa") && approvalDecision.equals("Approved with $1000 balance")) {
-                	VisaCard customerCard = visaBalance1000;}
-				else if (creditCardType.equals("Discover") && approvalDecision.equals("Approved with $500 balance")) {
-                	DiscoverCard customerCard = discBalance500;}
-				else if (creditCardType.equals("Discover") && approvalDecision.equals("Approved with $1000 balance")) {
-                	DiscoverCard customerCard = discBalance1000;}
-				else if (creditCardType.equals("Mastercard") && approvalDecision.equals("Approved with $500 balance")) {
-                	MasterCard customerCard = masBalance500;}
-                else {
-                	MasterCard customerCard = masBalance1000;}
-            }
-            
-            else {
-                System.out.println("You were denied a credit card");
-            } 
-            customer.close();
-            credit.close();
-	    }
+    public static void main(String[] args) {
+        Customer dummyCustomer = new Customer("John", "Doe", "john@example.com", new Date(), "JD001", "password");
+        dummyCustomer.addAccount(new Account(123456789, "Checking", 1000, "JD001"));
+        dummyCustomer.addAccount(new Account(987654321, "Saving", 5000, "JD001"));
+
+        new CreditCardRegistration(dummyCustomer);
     }
 }

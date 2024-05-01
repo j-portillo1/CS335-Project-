@@ -52,5 +52,9 @@ abstract class CreditCard {
             System.out.println("No balance due. Payment not required.");
         }
     }
+    
+    public int getCVV() {
+    	return this.cvv;
+    }
 
 }
