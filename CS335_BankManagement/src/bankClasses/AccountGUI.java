@@ -34,6 +34,7 @@ public class AccountGUI {
         frame.add(panel);
         panel.setLayout(new BorderLayout());
         
+        
         // Display the account information regardless of whether the customer has accounts or not
         displayAccountsPage();
 
@@ -48,13 +49,29 @@ public class AccountGUI {
             JButton openAccountButton = new JButton("Open Bank Account");
             openAccountButton.addActionListener(e -> {
                 try {
+                	frame.dispose();
                     new OpenBankAccountGUI(loggedInCustomer, this);
-                    frame.dispose(); // Close the current frame
                 } catch (ParseException ex) {
                     ex.printStackTrace();
                 }
             });
-            panel.add(openAccountButton, BorderLayout.SOUTH);
+            
+            // Create a back button
+            JButton backButton = new JButton("Back to Menu");
+            backButton.addActionListener(e -> {
+                frame.dispose(); // Close the current frame
+                new MenuFrame(loggedInCustomer); // Open the MenuFrame
+            });
+            
+            // Create a panel for the message and buttons
+            JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+            buttonPanel.add(openAccountButton);
+            buttonPanel.add(backButton);
+
+            // Add the panel with the message and buttons to the main panel
+            panel.add(buttonPanel, BorderLayout.SOUTH);
+
+
         } else {
             // Create a button to go back to the menu
             JButton backButton = new JButton("Back to Menu");
@@ -68,8 +85,13 @@ public class AccountGUI {
             JButton withdrawButton = new JButton("Withdraw");
 
             // Add action listeners to the buttons
-            depositButton.addActionListener(e -> new InsertMoneyGUI(loggedInCustomer, this));
-            withdrawButton.addActionListener(e -> new WithdrawMoneyGUI(loggedInCustomer, this));
+            depositButton.addActionListener(e -> {
+            	frame.dispose();
+            	new InsertMoneyGUI(loggedInCustomer, this);});
+            withdrawButton.addActionListener(e -> {
+            	frame.dispose();
+            	new WithdrawMoneyGUI(loggedInCustomer, this);
+            	});
 
             // Create a panel for the buttons and set layout
             JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -81,12 +103,14 @@ public class AccountGUI {
             // Create an "Internal Transfer" button
             JButton internalTransferButton = new JButton("Transfer");
             internalTransferButton.addActionListener(e -> {
+            	frame.dispose();
                 new TransferGUI(loggedInCustomer, this);
             });
 
             // Create an "Open Bank Account" button
             JButton openAccountButton = new JButton("Open Bank Account");
             openAccountButton.addActionListener(e -> {
+            	frame.dispose();
                 try {
                     new OpenBankAccountGUI(loggedInCustomer, this);
                 } catch (ParseException ex) {
@@ -102,6 +126,7 @@ public class AccountGUI {
 
             // Add the button panel to the south of the main panel
             panel.add(buttonPanel, BorderLayout.SOUTH);
+
         }
 
         frame.setVisible(true);

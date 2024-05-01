@@ -72,6 +72,7 @@ public class MenuFrame extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == accountsItem) {
             openAccountGUI(); // Open Account GUI when Accounts menu item is clicked
+            
         } else if (e.getActionCommand().equals("Credit Card")) {
             System.out.println("Opening Credit Card Page...");
             new CreditCardPageGUI(loggedInCustomer);
@@ -107,6 +108,7 @@ public class MenuFrame extends JFrame implements ActionListener {
     }
     
     private void openAccountGUI() {
+    	dispose();
         // Open Account GUI
         try {
 			new AccountGUI(loggedInCustomer);
