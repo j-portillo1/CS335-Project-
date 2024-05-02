@@ -22,15 +22,7 @@ public class Transaction {
 	public int getTransAmount() {
 		return transAmount;
 	}
-	
-//	public int updateBalance() {
-//		boolean dep = true;
-//		if (dep) {
-//			account balance =- transAmount
-//		} else {
-//			account balance =+ transAmount
-//		}
-//	}
+
 	
 	public String toString() {
 		return("Store: " + storeName + ", Amount: " + transAmount + ", Ending balance: ");

@@ -33,20 +33,23 @@ public class MenuFrame extends JFrame implements ActionListener {
         this.setLayout(new FlowLayout());
         menuBar = new JMenuBar();
 
-        
+        //Icon for Home Page
         ImageIcon homeIcon = new ImageIcon ("data/homeIcon.png");
         Image image1 = homeIcon.getImage().getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
         homeMenuItem = new JMenuItem("Home", new ImageIcon(image1));
         homeMenuItem.addActionListener(this);
         
+        //Icon for accounts Page
         ImageIcon accountsIcon = new ImageIcon ("data/Accounts.png");
         Image image2 = accountsIcon.getImage().getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
         accountsItem = new JMenuItem("Accounts",new ImageIcon(image2));
-
+        
+        //Icon for credit Card Page 
         creditCardIcon = new ImageIcon("data/creditcard.png");
         Image image3 = creditCardIcon.getImage().getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
         JMenuItem creditCardMenuItem = new JMenuItem("Credit Card", new ImageIcon(image3));
-
+        
+        //Icon to log out 
         logOutIcon = new ImageIcon("data/log-out-icon.png");
         Image image4 = logOutIcon.getImage().getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
         logOutItem = new JMenuItem("Log Out", new ImageIcon(image4));
@@ -54,7 +57,8 @@ public class MenuFrame extends JFrame implements ActionListener {
         accountsItem.addActionListener(this);
         creditCardMenuItem.addActionListener(this);
         logOutItem.addActionListener(this);
-
+        
+        //Sub Menu of Menu bar 
         menuBar.add(homeMenuItem);
         menuBar.add(accountsItem);
         menuBar.add(creditCardMenuItem);
